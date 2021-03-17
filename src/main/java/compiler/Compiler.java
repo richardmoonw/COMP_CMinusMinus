@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.*;
 
 public class Compiler {
     public static void main(String[] argv) {
@@ -11,10 +12,26 @@ public class Compiler {
         }
 
        try {
-            String sourceCode = FileManager.readFile(argv[0]);
+            String sourceCode = FileManager.readFile(argv[0]);  
+            Vector<String> lexemes = new Vector<String>();
+            String lexeme = "";
+            int state = 0;
             for(int character : sourceCode.toCharArray()) {
-                System.out.println(character);
+                if (state <= 10) {
+                    int column = CompilerEnvironment.getColumnNumber(character);
+                    state = CompilerEnvironment.TRANSITION_TABLE[state][column];
+                    if (column != 18) {
+                        lexeme += (char) character;
+                    }
+                }
+                else {
+                    lexemes.add(lexeme);
+                    lexeme = "";
+                    state = 0;
+                }
             }
+
+            System.out.println(lexemes);
         } catch (FileNotFoundException fileNotFoundException) {
             System.out.println("The filename you specified does no exist");
             System.exit(1);
