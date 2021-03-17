@@ -1,4 +1,8 @@
-public class FileManagerr {
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+public class FileManager {
 	
 	public static String readFile(String filename) throws FileNotFoundException, IOException {
 		
@@ -11,7 +15,6 @@ public class FileManagerr {
 			while (data != -1) {
 				sourceCode += (char) data;
 				data = sourceFile.read();
-
 			}
 		
 			sourceFile.close();

@@ -1,9 +1,7 @@
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Compiler {
-
     public static void main(String[] argv) {
 
         // Verify the number of arguments passed to the program.
@@ -13,8 +11,10 @@ public class Compiler {
         }
 
        try {
-            String sourceCode = readFile(argv[0]);
-            System.out.println(sourceCode);
+            String sourceCode = FileManager.readFile(argv[0]);
+            for(int character : sourceCode.toCharArray()) {
+                System.out.println(character);
+            }
         } catch (FileNotFoundException fileNotFoundException) {
             System.out.println("The filename you specified does no exist");
             System.exit(1);
