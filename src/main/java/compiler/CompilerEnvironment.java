@@ -40,6 +40,12 @@ public class CompilerEnvironment {
     private static final int SCCURLYBRACKET = 17;
     private static final int SWHITESPACE = 18;
 
+    // Variables to handle easily the different states.
+    public static final int FINAL_NORMAL_STATE = 10;
+    public static final int BLANK_COLUMN = 18;
+    public static final int ID_TOKEN = 11;
+    public static final int NUMBER_TOKEN = 12;
+
     public static final int[][] TRANSITION_TABLE = new int[][] 
     {  /*  l,  n,  +,  -,  *,  /,  <,  =,  >,  !,  ;,  ,,  (,  ),  [,  ],  {,  },  b */
         {  1,  2, 16, 17,  6,  3,  7,  9,  8, 10, 25, 26, 27, 28, 29, 30, 31, 32,  0 }, /*State 0*/

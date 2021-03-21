@@ -12,19 +12,42 @@ public class Compiler {
         }
 
        try {
-            String sourceCode = FileManager.readFile(argv[0]);  
-            Vector<String> lexemes = new Vector<String>();
-            String lexeme = "";
+            // TODO: Implement a better solution for the EOF.
+            String sourceCode = FileManager.readFile(argv[0]) + " "; 
             int state = 0;
-            for(int character : sourceCode.toCharArray()) {
-                if (state <= 10) {
+
+            Vector<String> lexemes = new Vector<String>();
+
+            int readSourceCode = 0; 
+            
+            int character = 0;
+
+            
+            String lexeme = "";
+
+            while(readSourceCode <= sourceCode.toCharArray().length) {
+
+                while(state <= CompilerEnvironment.FINAL_NORMAL_STATE && readSourceCode <= sourceCode.toCharArray().length) {
+                    if(readSourceCode < sourceCode.toCharArray().length) {
+                        character = sourceCode.toCharArray()[readSourceCode];
+                    }
+
                     int column = CompilerEnvironment.getColumnNumber(character);
-                    state = CompilerEnvironment.TRANSITION_TABLE[state][column];
-                    if (column != 18) {
+
+                    state =  CompilerEnvironment.TRANSITION_TABLE[state][column];
+
+                    if(column == CompilerEnvironment.BLANK_COLUMN) {
+                        readSourceCode++;
+                        continue;
+                    }
+
+                    if(state != CompilerEnvironment.ID_TOKEN && state != CompilerEnvironment.NUMBER_TOKEN) {
                         lexeme += (char) character;
+                        readSourceCode++;
                     }
                 }
-                else {
+
+                if (state > 10) {
                     lexemes.add(lexeme);
                     lexeme = "";
                     state = 0;
