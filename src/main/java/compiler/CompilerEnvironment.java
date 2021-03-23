@@ -1,9 +1,11 @@
+import java.util.ArrayList;
+
 public class CompilerEnvironment {
     
     // ASCII character for each permitted symbol.
     private static final int[] UPPERCASE_LETTER = new int[] {65, 90};
     private static final int[] LOWERCASE_LETTER = new int[] {97, 122};
-    private static final int[] NUMBER = new int[] {45, 57};
+    private static final int[] NUMBER = new int[] {48, 57};
     private static final int PLUS = 43;
     private static final int MINUS = 45;
     private static final int MULTIPLIER = 42;
@@ -41,11 +43,34 @@ public class CompilerEnvironment {
     private static final int SWHITESPACE = 18;
 
     // Variables to handle easily the different states.
-    public static final int FINAL_NORMAL_STATE = 10;
+    public static final int FIRST_STATE_OF_ACCEPTANCE = 11;
     public static final int BLANK_COLUMN = 18;
     public static final int ID_TOKEN = 11;
     public static final int NUMBER_TOKEN = 12;
+    public static final int COMMENT_TOKEN = 13;
+    public static final int SLASH_TOKEN = 14;
+    public static final int MULTIPLIER_TOKEN = 15;
+    public static final int PLUS_TOKEN = 16;
+    public static final int MINUS_TOKEN = 17;
+    public static final int LESS_THAN_TOKEN = 18;
+    public static final int LESS_EQUAL_THAN_TOKEN = 19;
+    public static final int GREATER_THAN_TOKEN = 20;
+    public static final int GREATER_EQUAL_TOKEN = 21;
+    public static final int ASSIGNMENT_TOKEN = 22;
+    public static final int LOGIC_EQUAL_TOKEN = 23;
+    public static final int NOT_EQUAL_TOKEN = 24; 
+    public static final int SEMICOLON_TOKEN = 25;
+    public static final int COMMA_TOKEN = 26;
+    public static final int OPEN_PARENTHESIS_TOKEN = 27;
+    public static final int CLOSE_PARENTHESIS_TOKEN = 28;
+    public static final int OPEN_SQUARE_BRACKET_TOKEN = 29;
+    public static final int CLOSE_SQUARE_BRACKET_TOKEN = 30;
+    public static final int OPEN_CURLY_BRACKET_TOKEN = 31;
+    public static final int CLOSE_CURLY_BRACKET_TOKEN = 32;
+    public static final int FIRST_STATE_OF_ERROR = 33;
 
+
+    // TODO: Add the possibility to type any character inside a comment.
     public static final int[][] TRANSITION_TABLE = new int[][] 
     {  /*  l,  n,  +,  -,  *,  /,  <,  =,  >,  !,  ;,  ,,  (,  ),  [,  ],  {,  },  b */
         {  1,  2, 16, 17,  6,  3,  7,  9,  8, 10, 25, 26, 27, 28, 29, 30, 31, 32,  0 }, /*State 0*/
@@ -60,6 +85,31 @@ public class CompilerEnvironment {
         { 22, 22, 36, 36, 36, 36, 36, 23, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 22 }, /*State 9*/
         { 36, 36, 36, 36, 36, 36, 36, 24, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 37 }  /*State 10*/
     };
+
+    private static final ArrayList<String> IDENTIFIER_SYMBOL_TABLE = new ArrayList<>();
+    private static final ArrayList<Integer> NUMBER_SYMBOL_TABLE = new ArrayList<>();
+
+    public static void setIdentifierSymbolTable(String id) { 
+        IDENTIFIER_SYMBOL_TABLE.add(id);
+    }
+    public static int getIdentifierSymbolTableIndex() {
+        return IDENTIFIER_SYMBOL_TABLE.size() - 1;
+    }
+
+    public static void setNumberSymbolTable(int number) {
+        NUMBER_SYMBOL_TABLE.add(number);
+    }
+
+    public static int getNumberSymbolTableIndex() {
+        return NUMBER_SYMBOL_TABLE.size() -1;
+    }
+
+    public static ArrayList<String> getIdentifierSymbolTable() {
+        return IDENTIFIER_SYMBOL_TABLE;
+    }
+    public static ArrayList<Integer> getNumberSymbolTable() {
+        return NUMBER_SYMBOL_TABLE;
+    }
 
     public static int getColumnNumber (int ascii_character) {
         int column = 0;
