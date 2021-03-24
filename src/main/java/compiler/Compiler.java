@@ -36,6 +36,7 @@ public class Compiler {
 
                     state =  CompilerEnvironment.TRANSITION_TABLE[state][column];
                     
+
                     if(column == CompilerEnvironment.BLANK_COLUMN) {
                         readSourceCode++;
                         continue;
@@ -70,6 +71,10 @@ public class Compiler {
                     }
                     lexeme = "";
                     state = 0;
+                }
+                else if (state >=  CompilerEnvironment.FIRST_STATE_OF_ERROR) {
+                    System.out.println("ERROR");
+                    System.exit(1);
                 }
             }
             
