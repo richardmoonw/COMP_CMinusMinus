@@ -16,7 +16,7 @@ public class Compiler {
             String sourceCode = FileManager.readFile(argv[0]) + " "; 
             int state = 0;
 
-            Vector<Object> lexemes = new Vector<Object>();
+            Vector<Object[]> lexemes = new Vector<Object[]>();
 
             int readSourceCode = 0; 
             
@@ -25,7 +25,6 @@ public class Compiler {
             
             String lexeme = "";
 
-            // TODO: RESERVE KEYWORDS. REMEMBER THAT YOU CAN IMPLEMENT A SET
             while(readSourceCode <= sourceCode.toCharArray().length) {
 
                 while(state < CompilerEnvironment.FIRST_STATE_OF_ACCEPTANCE && readSourceCode <= sourceCode.toCharArray().length) {
@@ -51,9 +50,13 @@ public class Compiler {
                 if (state >= CompilerEnvironment.FIRST_STATE_OF_ACCEPTANCE && state < CompilerEnvironment.FIRST_STATE_OF_ERROR) {
                     if (state != CompilerEnvironment.COMMENT_TOKEN) {
                         if (state == CompilerEnvironment.ID_TOKEN) {
-                            CompilerEnvironment.setIdentifierSymbolTable(lexeme);
-                            Object[] new_identifier = new Object[] {"id", CompilerEnvironment.getIdentifierSymbolTableIndex() };
-                            lexemes.add(new_identifier);
+                            if (CompilerEnvironment.isKeyword(lexeme)) {
+                                lexemes.add(new Object[] {lexeme});
+                            } else {
+                                CompilerEnvironment.setIdentifierSymbolTable(lexeme);
+                                Object[] new_identifier = new Object[] {"id", CompilerEnvironment.getIdentifierSymbolTableIndex() };
+                                lexemes.add(new_identifier);
+                            }
                         }
                         else if (state == CompilerEnvironment.NUMBER_TOKEN) {
                             CompilerEnvironment.setNumberSymbolTable(Integer.parseInt(lexeme));
@@ -61,7 +64,7 @@ public class Compiler {
                             lexemes.add(new_identifier);
                         }
                         else {
-                            lexemes.add(lexeme);
+                            lexemes.add(new Object[] {lexeme});
                         }
                         
                     }
@@ -69,11 +72,18 @@ public class Compiler {
                     state = 0;
                 }
             }
+            
+            for(Object[] token : lexemes) {
+                if (token.length == 1) {
+                    System.out.println(token[0]);
+                } else {
+                    System.out.println(token[0] + " " + token[1]);
+                }
+                
+            }
+
             System.out.println(CompilerEnvironment.getIdentifierSymbolTable());
             System.out.println(CompilerEnvironment.getNumberSymbolTable());
-            // for(Object token : lexemes) {
-            //     System.out.println((String) token);
-            // }
         } catch (FileNotFoundException fileNotFoundException) {
             System.out.println("The filename you specified does no exist");
             System.exit(1);

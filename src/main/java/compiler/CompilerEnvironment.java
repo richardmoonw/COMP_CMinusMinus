@@ -1,6 +1,18 @@
-import java.util.ArrayList;
+import java.util.*;
 
 public class CompilerEnvironment {
+    
+    private static final Set<String> KEYWORDS;
+
+    // Set of keywords
+    static {
+        KEYWORDS = new HashSet<String>();
+        KEYWORDS.addAll( Arrays.asList(
+            new String[] {
+                "else", "if", "int", "return", "void", "while", "input", "output"
+            }
+        ));
+    }
     
     // ASCII character for each permitted symbol.
     private static final int[] UPPERCASE_LETTER = new int[] {65, 90};
@@ -198,5 +210,9 @@ public class CompilerEnvironment {
         }
 
         return column;
+    }
+
+    public static boolean isKeyword(String lexeme) {
+        return KEYWORDS.contains(lexeme);
     }
 }
