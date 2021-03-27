@@ -42,38 +42,49 @@ public class Compiler {
                         continue;
                     }
 
-                    if(state != CompilerEnvironment.ID_TOKEN && state != CompilerEnvironment.NUMBER_TOKEN) {
+                    if(state < CompilerEnvironment.FIRST_STATE_OF_ACCEPTANCE) {
                         lexeme += (char) character;
                         readSourceCode++;
                     }
                 }
 
                 if (state >= CompilerEnvironment.FIRST_STATE_OF_ACCEPTANCE && state < CompilerEnvironment.FIRST_STATE_OF_ERROR) {
-                    if (state != CompilerEnvironment.COMMENT_TOKEN) {
-                        if (state == CompilerEnvironment.ID_TOKEN) {
-                            if (CompilerEnvironment.isKeyword(lexeme)) {
-                                lexemes.add(new Object[] {lexeme});
-                            } else {
-                                CompilerEnvironment.setIdentifierSymbolTable(lexeme);
-                                Object[] new_identifier = new Object[] {"id", CompilerEnvironment.getIdentifierSymbolTableIndex() };
-                                lexemes.add(new_identifier);
-                            }
-                        }
-                        else if (state == CompilerEnvironment.NUMBER_TOKEN) {
-                            CompilerEnvironment.setNumberSymbolTable(Integer.parseInt(lexeme));
-                            Object[] new_identifier = new Object[] {"num", CompilerEnvironment.getNumberSymbolTableIndex() };
+                    if (state == CompilerEnvironment.ID_TOKEN) {
+                        if (CompilerEnvironment.isKeyword(lexeme)) {
+                            lexemes.add(new Object[] {lexeme});
+                        } else {
+                            CompilerEnvironment.setIdentifierSymbolTable(lexeme);
+                            Object[] new_identifier = new Object[] {"id", CompilerEnvironment.getIdentifierSymbolTableIndex() };
                             lexemes.add(new_identifier);
                         }
-                        else {
-                            lexemes.add(new Object[] {lexeme});
-                        }
-                        
                     }
+                    else if (state == CompilerEnvironment.NUMBER_TOKEN) {
+                        CompilerEnvironment.setNumberSymbolTable(Integer.parseInt(lexeme));
+                        Object[] new_identifier = new Object[] {"num", CompilerEnvironment.getNumberSymbolTableIndex() };
+                        lexemes.add(new_identifier);
+                    }
+                    else {
+                        lexemes.add(new Object[] {lexeme});
+                    }
+
                     lexeme = "";
                     state = 0;
                 }
                 else if (state >=  CompilerEnvironment.FIRST_STATE_OF_ERROR) {
-                    System.out.println("ERROR");
+                    switch (state) {
+                        case CompilerEnvironment.INVALID_IDENTIFIER_ERROR:
+                            System.out.println("Invalid identifier error");
+                            System.exit(1);
+                        case CompilerEnvironment.INVALID_NUMBER_ERROR:
+                            System.out.println("Invalid number error");
+                            System.exit(1);
+                        case CompilerEnvironment.INVALID_LOGIC_OPERATOR_ERROR:
+                            System.out.println("Invalid logic operator");
+                            System.exit(1);
+                        case CompilerEnvironment.INVALID_CHARACTER_ERROR:
+                            System.out.println("Invalid character");
+                            System.exit(1);
+                    }
                     System.exit(1);
                 }
             }

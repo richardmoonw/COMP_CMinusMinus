@@ -56,47 +56,66 @@ public class CompilerEnvironment {
     private static final int SANYCHARACTER = 19;
 
     // Variables to handle easily the different states.
-    public static final int FIRST_STATE_OF_ACCEPTANCE = 11;
+    public static final int FIRST_STATE_OF_ACCEPTANCE = 26;
     public static final int BLANK_COLUMN = 18;
-    public static final int ID_TOKEN = 11;
-    public static final int NUMBER_TOKEN = 12;
-    public static final int COMMENT_TOKEN = 13;
-    public static final int SLASH_TOKEN = 14;
-    public static final int MULTIPLIER_TOKEN = 15;
-    public static final int PLUS_TOKEN = 16;
-    public static final int MINUS_TOKEN = 17;
-    public static final int LESS_THAN_TOKEN = 18;
-    public static final int LESS_EQUAL_THAN_TOKEN = 19;
-    public static final int GREATER_THAN_TOKEN = 20;
-    public static final int GREATER_EQUAL_TOKEN = 21;
-    public static final int ASSIGNMENT_TOKEN = 22;
-    public static final int LOGIC_EQUAL_TOKEN = 23;
-    public static final int NOT_EQUAL_TOKEN = 24; 
-    public static final int SEMICOLON_TOKEN = 25;
-    public static final int COMMA_TOKEN = 26;
-    public static final int OPEN_PARENTHESIS_TOKEN = 27;
-    public static final int CLOSE_PARENTHESIS_TOKEN = 28;
-    public static final int OPEN_SQUARE_BRACKET_TOKEN = 29;
-    public static final int CLOSE_SQUARE_BRACKET_TOKEN = 30;
-    public static final int OPEN_CURLY_BRACKET_TOKEN = 31;
-    public static final int CLOSE_CURLY_BRACKET_TOKEN = 32;
-    public static final int FIRST_STATE_OF_ERROR = 33;
+    public static final int ID_TOKEN = 26;
+    public static final int NUMBER_TOKEN = 27;
+    public static final int COMMENT_TOKEN = 28;
+    public static final int SLASH_TOKEN = 29;
+    public static final int MULTIPLIER_TOKEN = 30;
+    public static final int PLUS_TOKEN = 31;
+    public static final int MINUS_TOKEN = 32;
+    public static final int LESS_THAN_TOKEN = 33;
+    public static final int LESS_EQUAL_THAN_TOKEN = 34;
+    public static final int GREATER_THAN_TOKEN = 35;
+    public static final int GREATER_EQUAL_TOKEN = 36;
+    public static final int ASSIGNMENT_TOKEN = 37;
+    public static final int LOGIC_EQUAL_TOKEN = 38;
+    public static final int NOT_EQUAL_TOKEN = 39; 
+    public static final int SEMICOLON_TOKEN = 40;
+    public static final int COMMA_TOKEN = 41;
+    public static final int OPEN_PARENTHESIS_TOKEN = 42;
+    public static final int CLOSE_PARENTHESIS_TOKEN = 43;
+    public static final int OPEN_SQUARE_BRACKET_TOKEN = 44;
+    public static final int CLOSE_SQUARE_BRACKET_TOKEN = 45;
+    public static final int OPEN_CURLY_BRACKET_TOKEN = 46;
+    public static final int CLOSE_CURLY_BRACKET_TOKEN = 47;
+    public static final int FIRST_STATE_OF_ERROR = 48;
+    
+    public static final int INVALID_IDENTIFIER_ERROR = 48;
+    public static final int INVALID_NUMBER_ERROR = 49;
+    public static final int INVALID_LOGIC_OPERATOR_ERROR = 50;
+    public static final int INVALID_CHARACTER_ERROR = 51;
 
 
-    // TODO: Add the possibility to type any character inside a comment.
     public static final int[][] TRANSITION_TABLE = new int[][] 
     {  /*  l,  n,  +,  -,  *,  /,  <,  =,  >,  !,  ;,  ,,  (,  ),  [,  ],  {,  },  b, any */
-        {  1,  2, 16, 17,  6,  3,  7,  9,  8, 10, 25, 26, 27, 28, 29, 30, 31, 32,  0, 37 }, /*State 0*/
-        {  1, 33, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 37 }, /*State 1*/
-        { 34,  2, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 37 }, /*State 2*/
-        { 14, 14, 35, 35,  4, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 14, 37 }, /*State 3*/
+        {  1,  2,  8,  9,  7,  3, 10, 14, 12, 16, 18, 19, 20, 21, 22, 23, 24, 25,  0, 51 }, /*State 0*/
+        {  1, 48, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 51 }, /*State 1*/
+        {  1,  2, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 51 }, /*State 2*/
+        { 29, 29, 29, 29,  4, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 51 }, /*State 3*/
         {  4,  4,  4,  4,  5,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4 }, /*State 4*/
-        {  4,  4,  4,  4,  4, 13,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4 }, /*State 5*/
-        { 15, 15, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 15, 37 }, /*State 6*/
-        { 18, 18, 36, 36, 36, 36, 36, 19, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 18, 37 }, /*State 7*/
-        { 20, 20, 36, 36, 36, 36, 36, 21, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 20, 37 }, /*State 8*/
-        { 22, 22, 36, 36, 36, 36, 36, 23, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 22, 37 }, /*State 9*/
-        { 36, 36, 36, 36, 36, 36, 36, 24, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 37, 37 }  /*State 10*/
+        {  4,  4,  4,  4,  4,  6,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4 }, /*State 5*/
+        { 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 51 }, /*State 6*/
+        { 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 51 }, /*State 7*/
+        { 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 51 }, /*State 8*/
+        { 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 51 }, /*State 9*/
+        { 33, 33, 33, 33, 33, 33, 33, 11, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 51 }, /*State 10*/
+        { 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 51 }, /*State 11*/
+        { 35, 35, 35, 35, 35, 35, 35, 13, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 51 }, /*State 12*/
+        { 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 51 }, /*State 13*/
+        { 37, 37, 37, 37, 37, 37, 37, 15, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 51 }, /*State 14*/
+        { 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 51 }, /*State 15*/
+        { 50, 50, 50, 50, 50, 50, 50, 17, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 51 }, /*State 16*/
+        { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 51 }, /*State 17*/
+        { 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 51 }, /*State 18*/
+        { 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 51 }, /*State 19*/
+        { 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 51 }, /*State 20*/
+        { 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 51 }, /*State 21*/
+        { 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 51 }, /*State 22*/
+        { 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 51 }, /*State 23*/
+        { 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 51 }, /*State 24*/
+        { 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 51 }  /*State 25*/
     };
 
     private static final ArrayList<String> IDENTIFIER_SYMBOL_TABLE = new ArrayList<>();
