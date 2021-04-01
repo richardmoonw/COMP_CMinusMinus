@@ -87,7 +87,7 @@ public class CompilerEnvironment {
     public static final int INVALID_LOGIC_OPERATOR_ERROR = 50;
     public static final int INVALID_CHARACTER_ERROR = 51;
 
-
+    // Transition table represented as a bidimensional array.
     public static final int[][] TRANSITION_TABLE = new int[][] 
     {  /*  l,  n,  +,  -,  *,  /,  <,  =,  >,  !,  ;,  ,,  (,  ),  [,  ],  {,  },  b, any */
         {  1,  2,  8,  9,  7,  3, 10, 14, 12, 16, 18, 19, 20, 21, 22, 23, 24, 25,  0, 51 }, /*State 0*/
@@ -118,31 +118,40 @@ public class CompilerEnvironment {
         { 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 51 }  /*State 25*/
     };
 
-    private static final ArrayList<String> IDENTIFIER_SYMBOL_TABLE = new ArrayList<>();
-    private static final ArrayList<Integer> NUMBER_SYMBOL_TABLE = new ArrayList<>();
+    // Declaration of the identifiers' and numbers' symbol tables.
+    private static ArrayList<String> IDENTIFIER_SYMBOL_TABLE = new ArrayList<>();
+    private static ArrayList<Integer> NUMBER_SYMBOL_TABLE = new ArrayList<>();
+
+    // Getter and setter method for new records in the identifiers' symbol table.
+    public static int getIdentifierSymbolTableIndex() {
+        return IDENTIFIER_SYMBOL_TABLE.size() - 1;
+    }
 
     public static void setIdentifierSymbolTable(String id) { 
         IDENTIFIER_SYMBOL_TABLE.add(id);
     }
-    public static int getIdentifierSymbolTableIndex() {
-        return IDENTIFIER_SYMBOL_TABLE.size() - 1;
+    
+    // Getter and setter method for new records in the numbers' symbol table.
+    public static int getNumberSymbolTableIndex() {
+        return NUMBER_SYMBOL_TABLE.size() -1;
     }
 
     public static void setNumberSymbolTable(int number) {
         NUMBER_SYMBOL_TABLE.add(number);
     }
 
-    public static int getNumberSymbolTableIndex() {
-        return NUMBER_SYMBOL_TABLE.size() -1;
-    }
-
+    // Getter for the identifiers' symbol table.
     public static ArrayList<String> getIdentifierSymbolTable() {
         return IDENTIFIER_SYMBOL_TABLE;
     }
+
+    // Getter for the numbers' symbol table.
     public static ArrayList<Integer> getNumberSymbolTable() {
         return NUMBER_SYMBOL_TABLE;
     }
 
+    // Function used to get the column's index value of the transition table given the ASCII code of a determined 
+    // character.
     public static int getColumnNumber (int ascii_character) {
         int column = 0;
 
@@ -232,6 +241,7 @@ public class CompilerEnvironment {
         return column;
     }
 
+    // Function used to determine whether a lexeme is a keyword or not.
     public static boolean isKeyword(String lexeme) {
         return KEYWORDS.contains(lexeme);
     }

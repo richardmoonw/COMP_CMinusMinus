@@ -12,64 +12,92 @@ public class Compiler {
         }
 
        try {
-            // TODO: Implement a better solution for the EOF.
+            // Read the content of the specified file and store it in a String variable.
             String sourceCode = FileManager.readFile(argv[0]) + " "; 
-            int state = 0;
 
+            // Define the variables that will help while iterating over the source code. 
+            int state = 0;
+            int readSourceCode = 0; 
+            int character = 0;
+            String lexeme = "";
+            int column = 0;
+
+            // Declare a vector to store the token sequence produced by the lexical analyzer.
             Vector<Object[]> lexemes = new Vector<Object[]>();
 
-            int readSourceCode = 0; 
             
-            int character = 0;
-
-            
-            String lexeme = "";
-
+            // Read characters from the sourceCode until the end of the string is found.
             while(readSourceCode <= sourceCode.toCharArray().length) {
 
+                // While the state is not an acceptance or an error state.
                 while(state < CompilerEnvironment.FIRST_STATE_OF_ACCEPTANCE && readSourceCode <= sourceCode.toCharArray().length) {
+
+                    // If there are still characters to be read in the sourceCode, read the next character.
                     if(readSourceCode < sourceCode.toCharArray().length) {
                         character = sourceCode.toCharArray()[readSourceCode];
                     }
 
-                    int column = CompilerEnvironment.getColumnNumber(character);
+                    // Get the column's index value of the transition table given the ASCII code of the character read.
+                    column = CompilerEnvironment.getColumnNumber(character);
 
+                    // Calculate the new state with the current one and the transition given by the column value.
                     state =  CompilerEnvironment.TRANSITION_TABLE[state][column];
                     
-
+                    // If the character read is a blank, just ignore it.
                     if(column == CompilerEnvironment.BLANK_COLUMN) {
                         readSourceCode++;
                         continue;
                     }
 
+                    // If the new state is not an state of acceptance, add the character to the current lexeme and continue
+                    // to the next iteration.
                     if(state < CompilerEnvironment.FIRST_STATE_OF_ACCEPTANCE) {
                         lexeme += (char) character;
                         readSourceCode++;
                     }
                 }
 
+                // If the new state is an acceptance state.
                 if (state >= CompilerEnvironment.FIRST_STATE_OF_ACCEPTANCE && state < CompilerEnvironment.FIRST_STATE_OF_ERROR) {
+                    
+                    // If the new state corresponds to an identifier token.
                     if (state == CompilerEnvironment.ID_TOKEN) {
+                        
+                        // If the recognized token is a keyword, add it to the sequence just as a keyword. 
                         if (CompilerEnvironment.isKeyword(lexeme)) {
                             lexemes.add(new Object[] {lexeme});
-                        } else {
+                        } 
+                        // If the recognized token is an identifier, add it to the identifiers' symbol table
+                        // and add a token to the sequence referencing to that new record of the symbol table.
+                        else {
                             CompilerEnvironment.setIdentifierSymbolTable(lexeme);
                             Object[] new_identifier = new Object[] {"id", CompilerEnvironment.getIdentifierSymbolTableIndex() };
                             lexemes.add(new_identifier);
                         }
                     }
+                    // If the recognized token is a number, add it to the numbers' symbol table
+                    // and add a token to the sequence referencing to that new record of the symbol table.
                     else if (state == CompilerEnvironment.NUMBER_TOKEN) {
                         CompilerEnvironment.setNumberSymbolTable(Integer.parseInt(lexeme));
                         Object[] new_identifier = new Object[] {"num", CompilerEnvironment.getNumberSymbolTableIndex() };
                         lexemes.add(new_identifier);
                     }
+                    // If the recognized token is not a identifier, keyword nor number.
                     else {
-                        lexemes.add(new Object[] {lexeme});
+                        // If the recognized token is not a comment, add it to the sequence of tokens. If it is a comment
+                        // there won't be added any token to the sequence.
+                        if(state != CompilerEnvironment.COMMENT_TOKEN) {
+                            lexemes.add(new Object[] {lexeme});
+                        }
                     }
 
-                    lexeme = "";
+                    // Reset the state to 0 and empty the currently recognized lexeme.
                     state = 0;
+                    lexeme = "";
                 }
+
+                // If the new state is an error state, print the corresponding error message and abort the 
+                // execution of the program.
                 else if (state >=  CompilerEnvironment.FIRST_STATE_OF_ERROR) {
                     switch (state) {
                         case CompilerEnvironment.INVALID_IDENTIFIER_ERROR:
@@ -89,6 +117,7 @@ public class Compiler {
                 }
             }
             
+            // Print the sequence of tokens
             for(Object[] token : lexemes) {
                 if (token.length == 1) {
                     System.out.println(token[0]);
