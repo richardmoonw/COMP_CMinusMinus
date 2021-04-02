@@ -3,6 +3,7 @@ import java.util.*;
 public class CompilerEnvironment {
     
     private static final Set<String> KEYWORDS;
+    private static final Map<String, Integer> TOKEN_IDS;
 
     // Set of keywords
     static {
@@ -13,6 +14,64 @@ public class CompilerEnvironment {
             }
         ));
     }
+
+    // Token ids
+    static {
+        TOKEN_IDS = new HashMap<String, Integer>();
+        TOKEN_IDS.put("identifier", 0);
+        TOKEN_IDS.put("number", 1);
+        TOKEN_IDS.put("/", 2);
+        TOKEN_IDS.put("*", 3);
+        TOKEN_IDS.put("+", 4);
+        TOKEN_IDS.put("-", 5);
+        TOKEN_IDS.put("<", 6);
+        TOKEN_IDS.put("<=", 7);
+        TOKEN_IDS.put(">", 8);
+        TOKEN_IDS.put(">=", 9);
+        TOKEN_IDS.put("=", 10);
+        TOKEN_IDS.put("==", 11);
+        TOKEN_IDS.put("!=", 12);
+        TOKEN_IDS.put(";", 13);
+        TOKEN_IDS.put(",", 14);
+        TOKEN_IDS.put("(", 15);
+        TOKEN_IDS.put(")", 16);
+        TOKEN_IDS.put("[", 17);
+        TOKEN_IDS.put("]", 18);
+        TOKEN_IDS.put("{", 19);
+        TOKEN_IDS.put("}", 20);
+        TOKEN_IDS.put("else", 21);
+        TOKEN_IDS.put("if", 22);
+        TOKEN_IDS.put("int", 23);
+        TOKEN_IDS.put("return", 24);
+        TOKEN_IDS.put("void", 25);
+        TOKEN_IDS.put("while", 26);
+        TOKEN_IDS.put("input", 27);
+        TOKEN_IDS.put("output", 28);
+    }
+
+    // Unique token identifiers.
+    public static final int ID_TOKEN_ID = 1;
+    public static final int NUMBER_TOKEN_ID = 2;
+    public static final int COMMENT_TOKEN_ID = 3;
+    public static final int SLASH_TOKEN_ID = 4;
+    public static final int MULTIPLIER_TOKEN_ID = 5;
+    public static final int PLUS_TOKEN_ID = 6;
+    public static final int MINUS_TOKEN_ID = 32;
+    public static final int LESS_THAN_TOKEN_ID = 33;
+    public static final int LESS_EQUAL_THAN_TOKEN_ID = 34;
+    public static final int GREATER_THAN_TOKEN_ID = 35;
+    public static final int GREATER_EQUAL_TOKEN_ID = 36;
+    public static final int ASSIGNMENT_TOKEN_ID = 37;
+    public static final int LOGIC_EQUAL_TOKEN_ID = 38;
+    public static final int NOT_EQUAL_TOKEN_ID = 39; 
+    public static final int SEMICOLON_TOKEN_ID = 40;
+    public static final int COMMA_TOKEN_ID = 41;
+    public static final int OPEN_PARENTHESIS_TOKEN_ID = 42;
+    public static final int CLOSE_PARENTHESIS_TOKEN_ID = 43;
+    public static final int OPEN_SQUARE_BRACKET_TOKEN_ID = 44;
+    public static final int CLOSE_SQUARE_BRACKET_TOKEN_ID = 45;
+    public static final int OPEN_CURLY_BRACKET_TOKEN_ID = 46;
+    public static final int CLOSE_CURLY_BRACKET_TOKEN_ID = 47;
     
     // ASCII character for each permitted symbol.
     private static final int[] UPPERCASE_LETTER = new int[] {65, 90};
@@ -33,7 +92,7 @@ public class CompilerEnvironment {
     private static final int[] CURLY_BRACKETS = new int[] {123, 125};
     private static final int[] WHITESPACES = new int[] { 9, 10, 13, 32 };
 
-    // Character mapped to columns of the transition table.
+    // Characters mapped to columns of the transition table.
     private static final int SLETTER = 0;
     private static final int SNUMBER = 1;
     private static final int SPLUS = 2;
@@ -245,4 +304,10 @@ public class CompilerEnvironment {
     public static boolean isKeyword(String lexeme) {
         return KEYWORDS.contains(lexeme);
     }
+
+    // Function used to get the token id of a given lexeme.
+    public static int getTokenId(String lexeme) {
+        return TOKEN_IDS.get(lexeme).intValue();
+    }
+
 }

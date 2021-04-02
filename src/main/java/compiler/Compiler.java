@@ -23,7 +23,7 @@ public class Compiler {
             int column = 0;
 
             // Declare a vector to store the token sequence produced by the lexical analyzer.
-            Vector<Object[]> lexemes = new Vector<Object[]>();
+            Vector<Object[]> sequenceOfTokens = new Vector<Object[]>();
 
             
             // Read characters from the sourceCode until the end of the string is found.
@@ -59,35 +59,44 @@ public class Compiler {
 
                 // If the new state is an acceptance state.
                 if (state >= CompilerEnvironment.FIRST_STATE_OF_ACCEPTANCE && state < CompilerEnvironment.FIRST_STATE_OF_ERROR) {
-                    
+                    Object[] token = new Object[2];
+
                     // If the new state corresponds to an identifier token.
                     if (state == CompilerEnvironment.ID_TOKEN) {
                         
                         // If the recognized token is a keyword, add it to the sequence just as a keyword. 
                         if (CompilerEnvironment.isKeyword(lexeme)) {
-                            lexemes.add(new Object[] {lexeme});
+                            token[0] = CompilerEnvironment.getTokenId(lexeme);
+                            token[1] = "";
+                            sequenceOfTokens.add(token);
                         } 
                         // If the recognized token is an identifier, add it to the identifiers' symbol table
                         // and add a token to the sequence referencing to that new record of the symbol table.
                         else {
                             CompilerEnvironment.setIdentifierSymbolTable(lexeme);
-                            Object[] new_identifier = new Object[] {"id", CompilerEnvironment.getIdentifierSymbolTableIndex() };
-                            lexemes.add(new_identifier);
+                            token[0] = CompilerEnvironment.getTokenId("identifier");
+                            token[1] = CompilerEnvironment.getIdentifierSymbolTableIndex();
+                            sequenceOfTokens.add(token);
                         }
                     }
+
                     // If the recognized token is a number, add it to the numbers' symbol table
                     // and add a token to the sequence referencing to that new record of the symbol table.
                     else if (state == CompilerEnvironment.NUMBER_TOKEN) {
                         CompilerEnvironment.setNumberSymbolTable(Integer.parseInt(lexeme));
-                        Object[] new_identifier = new Object[] {"num", CompilerEnvironment.getNumberSymbolTableIndex() };
-                        lexemes.add(new_identifier);
+                        token[0] = CompilerEnvironment.getTokenId("number");
+                        token[1] = CompilerEnvironment.getNumberSymbolTableIndex();
+                        sequenceOfTokens.add(token);
                     }
+
                     // If the recognized token is not a identifier, keyword nor number.
                     else {
                         // If the recognized token is not a comment, add it to the sequence of tokens. If it is a comment
                         // there won't be added any token to the sequence.
                         if(state != CompilerEnvironment.COMMENT_TOKEN) {
-                            lexemes.add(new Object[] {lexeme});
+                            token[0] = CompilerEnvironment.getTokenId(lexeme);
+                            token[1] = "";
+                            sequenceOfTokens.add(token);
                         }
                     }
 
@@ -118,13 +127,8 @@ public class Compiler {
             }
             
             // Print the sequence of tokens
-            for(Object[] token : lexemes) {
-                if (token.length == 1) {
-                    System.out.println(token[0]);
-                } else {
-                    System.out.println(token[0] + " " + token[1]);
-                }
-                
+            for(Object[] tok : sequenceOfTokens) {
+                System.out.println(tok[0] + " " + tok[1]);             
             }
 
             System.out.println(CompilerEnvironment.getIdentifierSymbolTable());
