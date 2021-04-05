@@ -48,30 +48,6 @@ public class CompilerEnvironment {
         TOKEN_IDS.put("input", 27);
         TOKEN_IDS.put("output", 28);
     }
-
-    // Unique token identifiers.
-    public static final int ID_TOKEN_ID = 1;
-    public static final int NUMBER_TOKEN_ID = 2;
-    public static final int COMMENT_TOKEN_ID = 3;
-    public static final int SLASH_TOKEN_ID = 4;
-    public static final int MULTIPLIER_TOKEN_ID = 5;
-    public static final int PLUS_TOKEN_ID = 6;
-    public static final int MINUS_TOKEN_ID = 32;
-    public static final int LESS_THAN_TOKEN_ID = 33;
-    public static final int LESS_EQUAL_THAN_TOKEN_ID = 34;
-    public static final int GREATER_THAN_TOKEN_ID = 35;
-    public static final int GREATER_EQUAL_TOKEN_ID = 36;
-    public static final int ASSIGNMENT_TOKEN_ID = 37;
-    public static final int LOGIC_EQUAL_TOKEN_ID = 38;
-    public static final int NOT_EQUAL_TOKEN_ID = 39; 
-    public static final int SEMICOLON_TOKEN_ID = 40;
-    public static final int COMMA_TOKEN_ID = 41;
-    public static final int OPEN_PARENTHESIS_TOKEN_ID = 42;
-    public static final int CLOSE_PARENTHESIS_TOKEN_ID = 43;
-    public static final int OPEN_SQUARE_BRACKET_TOKEN_ID = 44;
-    public static final int CLOSE_SQUARE_BRACKET_TOKEN_ID = 45;
-    public static final int OPEN_CURLY_BRACKET_TOKEN_ID = 46;
-    public static final int CLOSE_CURLY_BRACKET_TOKEN_ID = 47;
     
     // ASCII character for each permitted symbol.
     private static final int[] UPPERCASE_LETTER = new int[] {65, 90};
@@ -120,31 +96,13 @@ public class CompilerEnvironment {
     public static final int ID_TOKEN = 26;
     public static final int NUMBER_TOKEN = 27;
     public static final int COMMENT_TOKEN = 28;
-    public static final int SLASH_TOKEN = 29;
-    public static final int MULTIPLIER_TOKEN = 30;
-    public static final int PLUS_TOKEN = 31;
-    public static final int MINUS_TOKEN = 32;
-    public static final int LESS_THAN_TOKEN = 33;
-    public static final int LESS_EQUAL_THAN_TOKEN = 34;
-    public static final int GREATER_THAN_TOKEN = 35;
-    public static final int GREATER_EQUAL_TOKEN = 36;
-    public static final int ASSIGNMENT_TOKEN = 37;
-    public static final int LOGIC_EQUAL_TOKEN = 38;
-    public static final int NOT_EQUAL_TOKEN = 39; 
-    public static final int SEMICOLON_TOKEN = 40;
-    public static final int COMMA_TOKEN = 41;
-    public static final int OPEN_PARENTHESIS_TOKEN = 42;
-    public static final int CLOSE_PARENTHESIS_TOKEN = 43;
-    public static final int OPEN_SQUARE_BRACKET_TOKEN = 44;
-    public static final int CLOSE_SQUARE_BRACKET_TOKEN = 45;
-    public static final int OPEN_CURLY_BRACKET_TOKEN = 46;
-    public static final int CLOSE_CURLY_BRACKET_TOKEN = 47;
     public static final int FIRST_STATE_OF_ERROR = 48;
     
     public static final int INVALID_IDENTIFIER_ERROR = 48;
     public static final int INVALID_NUMBER_ERROR = 49;
     public static final int INVALID_LOGIC_OPERATOR_ERROR = 50;
     public static final int INVALID_CHARACTER_ERROR = 51;
+    public static final int UNCLOSED_COMMENT_ERROR = 52;
 
     // Transition table represented as a bidimensional array.
     public static final int[][] TRANSITION_TABLE = new int[][] 

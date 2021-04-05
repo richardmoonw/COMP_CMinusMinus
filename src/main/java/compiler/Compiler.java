@@ -42,6 +42,12 @@ public class Compiler {
 
                     // Calculate the new state with the current one and the transition given by the column value.
                     state =  CompilerEnvironment.TRANSITION_TABLE[state][column];
+
+                    // If the current character is the EOF and the new state is non terminal
+                    if(readSourceCode == sourceCode.toCharArray().length &&
+                            state < CompilerEnvironment.FIRST_STATE_OF_ACCEPTANCE) {
+                        state = CompilerEnvironment.UNCLOSED_COMMENT_ERROR; 
+                    }
                     
                     // If the character read is a blank, just ignore it.
                     if(column == CompilerEnvironment.BLANK_COLUMN) {
@@ -120,6 +126,12 @@ public class Compiler {
                             System.exit(1);
                         case CompilerEnvironment.INVALID_CHARACTER_ERROR:
                             System.out.println("Invalid character");
+                            System.exit(1);
+                        case CompilerEnvironment.UNCLOSED_COMMENT_ERROR:
+                            System.out.println("Unclosed comment");
+                            System.exit(1);
+                        default:
+                            System.out.println("Invalid state");
                             System.exit(1);
                     }
                     System.exit(1);
