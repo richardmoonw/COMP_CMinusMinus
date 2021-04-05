@@ -27,7 +27,7 @@ public class Compiler {
 
             
             // Read characters from the sourceCode until the end of the string is found.
-            while(readSourceCode <= sourceCode.toCharArray().length) {
+            while(readSourceCode < sourceCode.toCharArray().length) {
 
                 // While the state is not an acceptance or an error state.
                 while(state < CompilerEnvironment.FIRST_STATE_OF_ACCEPTANCE && readSourceCode <= sourceCode.toCharArray().length) {
