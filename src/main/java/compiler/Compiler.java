@@ -13,7 +13,7 @@ public class Compiler {
 
        try {
             // Read the content of the specified file and store it in a String variable.
-            String sourceCode = FileManager.readFile(argv[0]) + " "; 
+            String sourceCode = FileManager.readFile(argv[0]).trim() + " "; 
 
             // Define the variables that will help while iterating over the source code. 
             int state = 0;

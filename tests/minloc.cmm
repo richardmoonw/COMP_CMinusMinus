@@ -16,4 +16,4 @@ int miniloc(int a[], int low, int high) {
     }
     return k;
 }
-/* END of miniloc() 
+/* END of miniloc() */
