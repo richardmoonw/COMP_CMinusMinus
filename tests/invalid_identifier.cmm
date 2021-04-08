@@ -1,0 +1,9 @@
+int main() {
+    int hello123 = 6;
+    return hello123;
+}
+
+/* 
+Expected result:
+Error: Invalid identifier
+*/

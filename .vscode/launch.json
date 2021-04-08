@@ -9,7 +9,7 @@
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}",
-            "args": "tests/main.cmm"
+            "args": "tests/empty_file.cmm"
         },
         {
             "type": "java",

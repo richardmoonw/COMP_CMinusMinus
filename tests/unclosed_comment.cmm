@@ -1,0 +1,7 @@
+/*
+This should return an error because I am not a closed comment.
+
+
+
+Expected result:
+Error. Unclosed comment.

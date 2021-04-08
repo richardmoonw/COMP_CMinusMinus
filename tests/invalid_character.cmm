@@ -1,0 +1,14 @@
+int main() {
+    input x;
+    x = x + 10;
+    if (x < 100) { 
+        output x;
+    } else {
+        output \x;
+    }
+}
+
+/* 
+Expected result:
+Error: Invalid character
+*/

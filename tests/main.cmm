@@ -10,7 +10,8 @@ int miniloc(int a[], int low, int high) {
     i = low + 1;
     while (i < high) { 
         if (a[i] < x) {
-            x = a[i];k = i;
+            x = a[i];
+            k = i;
         }
         i = i + 1;
     }

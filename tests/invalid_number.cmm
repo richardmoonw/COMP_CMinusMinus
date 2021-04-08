@@ -1,0 +1,9 @@
+int main() {
+    int a = 123a;
+    return a;
+}
+
+/* 
+Expected result:
+Error: Invalid number
+*/
