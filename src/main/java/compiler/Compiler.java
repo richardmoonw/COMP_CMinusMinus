@@ -16,7 +16,7 @@ public class Compiler {
             String sourceCode = FileManager.readFile(argv[0]).trim() + " "; 
 
             // Define the variables that will help while iterating over the source code. 
-            int state = 0;
+            int state = CompilerEnvironment.INITIAL_STATE;
             int readSourceCode = 0; 
             int character = 0;
             String lexeme = "";
@@ -46,7 +46,12 @@ public class Compiler {
                     // If the current character is the EOF and the new state is non terminal
                     if(readSourceCode == sourceCode.toCharArray().length &&
                             state < CompilerEnvironment.FIRST_STATE_OF_ACCEPTANCE) {
-                        state = CompilerEnvironment.UNCLOSED_COMMENT_ERROR; 
+                        if(state == CompilerEnvironment.OPEN_COMMENT_STATUS_1 || state == CompilerEnvironment.OPEN_COMMENT_STATUS_2) {
+                            state = CompilerEnvironment.UNCLOSED_COMMENT_ERROR; 
+                        } else if(state == CompilerEnvironment.INITIAL_STATE) {
+                            state = CompilerEnvironment.EMPTY_FILE_ERROR;
+                        }
+                        
                     }
                     
                     // If the character read is a blank, just ignore it.
@@ -107,7 +112,7 @@ public class Compiler {
                     }
 
                     // Reset the state to 0 and empty the currently recognized lexeme.
-                    state = 0;
+                    state = CompilerEnvironment.INITIAL_STATE;
                     lexeme = "";
                 }
 
@@ -116,22 +121,25 @@ public class Compiler {
                 else if (state >=  CompilerEnvironment.FIRST_STATE_OF_ERROR) {
                     switch (state) {
                         case CompilerEnvironment.INVALID_IDENTIFIER_ERROR:
-                            System.out.println("Invalid identifier error");
+                            System.out.println("EXECUTION FINISHED DUE TO AN INVALID IDENTIFIER ERROR");
                             System.exit(1);
                         case CompilerEnvironment.INVALID_NUMBER_ERROR:
-                            System.out.println("Invalid number error");
+                            System.out.println("EXECUTION FINISHED DUE TO AN INVALID NUMBER ERROR");
                             System.exit(1);
                         case CompilerEnvironment.INVALID_LOGIC_OPERATOR_ERROR:
-                            System.out.println("Invalid logic operator");
+                            System.out.println("EXECUTION FINISHED DUE TO AN INVALID LOGIC OPERATOR ERROR");
                             System.exit(1);
                         case CompilerEnvironment.INVALID_CHARACTER_ERROR:
-                            System.out.println("Invalid character");
+                            System.out.println("EXECUTION FINISHED DUE TO AN INVALID CHARACTER ERROR");
                             System.exit(1);
                         case CompilerEnvironment.UNCLOSED_COMMENT_ERROR:
-                            System.out.println("Unclosed comment");
+                            System.out.println("EXECUTION FINISHED DUE TO AN UNCLOSED COMMENT ERROR");
+                            System.exit(1);
+                        case CompilerEnvironment.EMPTY_FILE_ERROR:
+                            System.out.println("EXECUTION FINISHED DUE TO AN EMPTY FILE ERROR");
                             System.exit(1);
                         default:
-                            System.out.println("Invalid state");
+                            System.out.println("EXECUTION FINISHED DUE TO AN INVALID STATE ERRRO");
                             System.exit(1);
                     }
                     System.exit(1);
@@ -143,13 +151,14 @@ public class Compiler {
                 System.out.println(tok[0] + " " + tok[1]);             
             }
 
+            // Print the identifiers' and numbers' symbol table
             System.out.println(CompilerEnvironment.getIdentifierSymbolTable());
             System.out.println(CompilerEnvironment.getNumberSymbolTable());
         } catch (FileNotFoundException fileNotFoundException) {
-            System.out.println("The filename you specified does no exist");
+            System.out.println("EXECUTION FINISHED CAUSE THE FILENAME YOU SPECIFIED DOES NOT EXIST");
             System.exit(1);
         } catch (IOException ioException) {
-            System.out.println("There was a problem while reading the file");
+            System.out.println("EXECUTION FINISHED CAUSE THERE WAS A PROBLEM READING THE FILE");
             System.exit(1);
         }
     }

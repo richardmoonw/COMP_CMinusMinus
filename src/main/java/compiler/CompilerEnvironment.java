@@ -96,6 +96,9 @@ public class CompilerEnvironment {
     public static final int ID_TOKEN = 26;
     public static final int NUMBER_TOKEN = 27;
     public static final int COMMENT_TOKEN = 28;
+    public static final int OPEN_COMMENT_STATUS_1 = 4;
+    public static final int OPEN_COMMENT_STATUS_2 = 5;
+    public static final int INITIAL_STATE = 0;
     public static final int FIRST_STATE_OF_ERROR = 48;
     
     public static final int INVALID_IDENTIFIER_ERROR = 48;
@@ -103,13 +106,14 @@ public class CompilerEnvironment {
     public static final int INVALID_LOGIC_OPERATOR_ERROR = 50;
     public static final int INVALID_CHARACTER_ERROR = 51;
     public static final int UNCLOSED_COMMENT_ERROR = 52;
+    public static final int EMPTY_FILE_ERROR = 53;
 
     // Transition table represented as a bidimensional array.
     public static final int[][] TRANSITION_TABLE = new int[][] 
     {  /*  l,  n,  +,  -,  *,  /,  <,  =,  >,  !,  ;,  ,,  (,  ),  [,  ],  {,  },  b, any */
         {  1,  2,  8,  9,  7,  3, 10, 14, 12, 16, 18, 19, 20, 21, 22, 23, 24, 25,  0, 51 }, /*State 0*/
         {  1, 48, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 51 }, /*State 1*/
-        {  1,  2, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 51 }, /*State 2*/
+        { 49,  2, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 51 }, /*State 2*/
         { 29, 29, 29, 29,  4, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 51 }, /*State 3*/
         {  4,  4,  4,  4,  5,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4 }, /*State 4*/
         {  4,  4,  4,  4,  4,  6,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4 }, /*State 5*/
