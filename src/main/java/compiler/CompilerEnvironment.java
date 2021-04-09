@@ -1,11 +1,17 @@
+/* 
+The CompilerEnvironment class stores all constant and non constant variables used by the Compiler class in order
+to construct the sequence of tokens and the symbol tables corresponding to the lexical analysis phase. It also 
+contains a few methods to obtain or modify the values of the variables within the class. The class contains the 
+implementation of some important data structures as the set to store the keywords, dictionary to determine the token
+ids, bidimensional array to handle the transition table, and lists to manage the symbol tables.
+*/
+
 import java.util.*;
 
 public class CompilerEnvironment {
     
+    // Set used to store the allowed keywords of the language.
     private static final Set<String> KEYWORDS;
-    private static final Map<String, Integer> TOKEN_IDS;
-
-    // Set of keywords
     static {
         KEYWORDS = new HashSet<String>();
         KEYWORDS.addAll( Arrays.asList(
@@ -15,7 +21,8 @@ public class CompilerEnvironment {
         ));
     }
 
-    // Token ids
+    // Dictionary used to consult the token ids given their token name.
+    private static final Map<String, Integer> TOKEN_IDS;
     static {
         TOKEN_IDS = new HashMap<String, Integer>();
         TOKEN_IDS.put("identifier", 0);
@@ -49,7 +56,7 @@ public class CompilerEnvironment {
         TOKEN_IDS.put("output", 28);
     }
     
-    // ASCII character for each permitted symbol.
+    // ASCII character for each permitted symbol of the language.
     private static final int[] UPPERCASE_LETTER = new int[] {65, 90};
     private static final int[] LOWERCASE_LETTER = new int[] {97, 122};
     private static final int[] NUMBER = new int[] {48, 57};
@@ -68,7 +75,8 @@ public class CompilerEnvironment {
     private static final int[] CURLY_BRACKETS = new int[] {123, 125};
     private static final int[] WHITESPACES = new int[] { 9, 10, 13, 32 };
 
-    // Characters mapped to columns of the transition table.
+
+    // Number of column in the transition table associated with each different character allowed by the language.
     private static final int SLETTER = 0;
     private static final int SNUMBER = 1;
     private static final int SPLUS = 2;
@@ -90,17 +98,17 @@ public class CompilerEnvironment {
     private static final int SWHITESPACE = 18;
     private static final int SANYCHARACTER = 19;
 
-    // Variables to handle easily the different states.
-    public static final int FIRST_STATE_OF_ACCEPTANCE = 26;
+
+    // Constant variables used to facilitate the identification of the different states of the transition table.
+    public static final int INITIAL_STATE = 0;
+    public static final int OPEN_COMMENT_STATUS_1 = 4;
+    public static final int OPEN_COMMENT_STATUS_2 = 5;
     public static final int BLANK_COLUMN = 18;
+    public static final int FIRST_STATE_OF_ACCEPTANCE = 26;
     public static final int ID_TOKEN = 26;
     public static final int NUMBER_TOKEN = 27;
     public static final int COMMENT_TOKEN = 28;
-    public static final int OPEN_COMMENT_STATUS_1 = 4;
-    public static final int OPEN_COMMENT_STATUS_2 = 5;
-    public static final int INITIAL_STATE = 0;
     public static final int FIRST_STATE_OF_ERROR = 48;
-    
     public static final int INVALID_IDENTIFIER_ERROR = 48;
     public static final int INVALID_NUMBER_ERROR = 49;
     public static final int INVALID_LOGIC_OPERATOR_ERROR = 50;
@@ -108,7 +116,7 @@ public class CompilerEnvironment {
     public static final int UNCLOSED_COMMENT_ERROR = 52;
     public static final int EMPTY_FILE_ERROR = 53;
 
-    // Transition table represented as a bidimensional array.
+    // Bidimensional array used to represent the transition table. 
     public static final int[][] TRANSITION_TABLE = new int[][] 
     {  /*  l,  n,  +,  -,  *,  /,  <,  =,  >,  !,  ;,  ,,  (,  ),  [,  ],  {,  },  b, any */
         {  1,  2,  8,  9,  7,  3, 10, 14, 12, 16, 18, 19, 20, 21, 22, 23, 24, 25,  0, 51 }, /*State 0*/
@@ -139,40 +147,43 @@ public class CompilerEnvironment {
         { 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 51 }  /*State 25*/
     };
 
-    // Declaration of the identifiers' and numbers' symbol tables.
+    // List used to manage the symbol table for identifiers.
     private static ArrayList<String> IDENTIFIER_SYMBOL_TABLE = new ArrayList<>();
-    private static ArrayList<Integer> NUMBER_SYMBOL_TABLE = new ArrayList<>();
 
-    // Getter and setter method for new records in the identifiers' symbol table.
+    // Method used to obtain the reference for a new record in the symbol table for identifiers. 
     public static int getIdentifierSymbolTableIndex() {
         return IDENTIFIER_SYMBOL_TABLE.size() - 1;
     }
 
+    // Method used to insert a new record in the symbol table for identifiers.
     public static void setIdentifierSymbolTable(String id) { 
         IDENTIFIER_SYMBOL_TABLE.add(id);
     }
+
+    // List used to manage the symbol table for numbers.
+    private static ArrayList<Integer> NUMBER_SYMBOL_TABLE = new ArrayList<>();
     
-    // Getter and setter method for new records in the numbers' symbol table.
+    // Method used to obtain the reference for a new record in the symbol table for numbers.
     public static int getNumberSymbolTableIndex() {
         return NUMBER_SYMBOL_TABLE.size() -1;
     }
 
+    // Method used to insert a new record in the symbol table for numbers.
     public static void setNumberSymbolTable(int number) {
         NUMBER_SYMBOL_TABLE.add(number);
     }
 
-    // Getter for the identifiers' symbol table.
+    // Method used in order to obtain the whole symbol table for identifiers.
     public static ArrayList<String> getIdentifierSymbolTable() {
         return IDENTIFIER_SYMBOL_TABLE;
     }
 
-    // Getter for the numbers' symbol table.
+    // Method used in order to obtain the whole symbol table for numbers.
     public static ArrayList<Integer> getNumberSymbolTable() {
         return NUMBER_SYMBOL_TABLE;
     }
 
-    // Function used to get the column's index value of the transition table given the ASCII code of a determined 
-    // character.
+    // Method used to get the column's index value in the transition table of a determined character given its ASCII code.
     public static int getColumnNumber (int ascii_character) {
         int column = 0;
 
@@ -262,12 +273,14 @@ public class CompilerEnvironment {
         return column;
     }
 
-    // Function used to determine whether a lexeme is a keyword or not.
+    // Method used to determine whether a lexeme is a keyword or not. This method retrieves the information from the
+    // KEYWORDS set.
     public static boolean isKeyword(String lexeme) {
         return KEYWORDS.contains(lexeme);
     }
 
-    // Function used to get the token id of a given lexeme.
+    // Method used to obtain the token id given its token name. This method retrieves the information from the 
+    // TOKEN_IDS dictionary.
     public static int getTokenId(String lexeme) {
         return TOKEN_IDS.get(lexeme).intValue();
     }

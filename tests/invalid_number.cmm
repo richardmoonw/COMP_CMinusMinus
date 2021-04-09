@@ -3,7 +3,3 @@ int main() {
     return a;
 }
 
-/* 
-Expected result:
-Error: Invalid number
-*/
