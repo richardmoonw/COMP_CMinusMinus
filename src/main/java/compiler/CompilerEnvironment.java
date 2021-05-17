@@ -151,12 +151,22 @@ public class CompilerEnvironment {
     private static ArrayList<String> IDENTIFIER_SYMBOL_TABLE = new ArrayList<>();
 
     // Method used to obtain the reference for a new record in the symbol table for identifiers. 
-    public static int getIdentifierSymbolTableIndex() {
+    public static int getIdentifierSymbolTableIndex(String id) {
+        for(int i=0; i<IDENTIFIER_SYMBOL_TABLE.size(); i++) {
+            if(IDENTIFIER_SYMBOL_TABLE.get(i).equals(id)) {
+                return i;
+            }
+        }
         return IDENTIFIER_SYMBOL_TABLE.size() - 1;
     }
 
     // Method used to insert a new record in the symbol table for identifiers.
-    public static void setIdentifierSymbolTable(String id) { 
+    public static void setIdentifierSymbolTable(String id) {
+        for(int i=0; i<IDENTIFIER_SYMBOL_TABLE.size(); i++) {
+            if(IDENTIFIER_SYMBOL_TABLE.get(i).equals(id)) {
+                return;
+            }
+        }
         IDENTIFIER_SYMBOL_TABLE.add(id);
     }
 
@@ -164,12 +174,22 @@ public class CompilerEnvironment {
     private static ArrayList<Integer> NUMBER_SYMBOL_TABLE = new ArrayList<>();
     
     // Method used to obtain the reference for a new record in the symbol table for numbers.
-    public static int getNumberSymbolTableIndex() {
+    public static int getNumberSymbolTableIndex(int number) {
+        for(int i=0; i<NUMBER_SYMBOL_TABLE.size(); i++) {
+            if(NUMBER_SYMBOL_TABLE.get(i).equals(number)) {
+                return i;
+            }
+        }
         return NUMBER_SYMBOL_TABLE.size() -1;
     }
 
     // Method used to insert a new record in the symbol table for numbers.
     public static void setNumberSymbolTable(int number) {
+        for(int i=0; i<NUMBER_SYMBOL_TABLE.size(); i++) {
+            if(NUMBER_SYMBOL_TABLE.get(i).equals(number)){
+                return;
+            }
+        }
         NUMBER_SYMBOL_TABLE.add(number);
     }
 

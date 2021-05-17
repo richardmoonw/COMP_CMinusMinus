@@ -108,7 +108,7 @@ public class Compiler {
                         else {
                             CompilerEnvironment.setIdentifierSymbolTable(lexeme);
                             token[0] = CompilerEnvironment.getTokenId("identifier");
-                            token[1] = CompilerEnvironment.getIdentifierSymbolTableIndex();
+                            token[1] = CompilerEnvironment.getIdentifierSymbolTableIndex(lexeme);
                             sequenceOfTokens.add(token);
                         }
                     }
@@ -118,7 +118,7 @@ public class Compiler {
                     else if (state == CompilerEnvironment.NUMBER_TOKEN) {
                         CompilerEnvironment.setNumberSymbolTable(Integer.parseInt(lexeme));
                         token[0] = CompilerEnvironment.getTokenId("number");
-                        token[1] = CompilerEnvironment.getNumberSymbolTableIndex();
+                        token[1] = CompilerEnvironment.getNumberSymbolTableIndex(Integer.parseInt(lexeme));
                         sequenceOfTokens.add(token);
                     }
 
