@@ -54,6 +54,7 @@ public class CompilerEnvironment {
         TOKEN_IDS.put("while", 26);
         TOKEN_IDS.put("input", 27);
         TOKEN_IDS.put("output", 28);
+        TOKEN_IDS.put("$", 29);
     }
     
     // ASCII character for each permitted symbol of the language.

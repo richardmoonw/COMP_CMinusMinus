@@ -189,6 +189,65 @@ public class Compiler {
             // Print the identifiers' and numbers' symbol table
             System.out.println(CompilerEnvironment.getIdentifierSymbolTable());
             System.out.println(CompilerEnvironment.getNumberSymbolTable());
+
+            
+            // SYNTACTIC ANALYSIS STARTING POINT.
+
+            // Add the $ token at the end of the token sequence in order to be able to determine whether a program has been fully read or not.
+            Object[] end_token = new Object[2];
+            end_token[0] = CompilerEnvironment.getTokenId("$");
+            end_token[1] = "";
+            sequenceOfTokens.add(end_token);
+
+            // Stack used to store the symbols obtained from the different production rules of the CFG according to the tokens read 
+            // from the token sequence. Each element of the stack represents the id of an terminal or non-terminal symbol of the 
+            // grammar.
+            Stack<Integer> symbolsStack = new Stack<>();
+
+            // Add the $ symbol as the first element of the stack of symbols in order to determine whether the syntactic analysis can be finished or not.
+            symbolsStack.push(SyntacticEnvironment.DOLAR);
+
+            // Add the start symbol of the CFG to start the syntactic analysis over the sequence of tokens.
+            symbolsStack.push(SyntacticEnvironment.PROGRAM);
+
+            int currentToken = 0;
+            int readToken = 0;
+            String error;
+            while(symbolsStack.peek() != SyntacticEnvironment.DOLAR) {
+                readToken = (int) sequenceOfTokens.get(currentToken)[0];
+                if (symbolsStack.peek() < 100 && (symbolsStack.peek() == readToken)) {
+                    symbolsStack.pop();
+                    currentToken++;
+                }
+                // The current symbol is terminal but it is not the one at the peek of the stack
+                else if(symbolsStack.peek() < 100 && (symbolsStack.peek() != readToken)) {
+                    System.out.println(String.format("Unexpected token found. It was expected a %s, but it was obtained a %s. To correct the error look at your token #%s",
+                        SyntacticEnvironment.TOKENS[symbolsStack.peek()], SyntacticEnvironment.TOKENS[readToken], currentToken));
+                    System.exit(1);
+                }
+                else if(SyntacticEnvironment.PARSING_TABLE[symbolsStack.peek()-100][readToken] < SyntacticEnvironment.ERROR_LIMIT) {
+                    error = SyntacticEnvironment.getErrorDescription(SyntacticEnvironment.PARSING_TABLE[symbolsStack.peek()-100][readToken], currentToken, readToken);
+                    System.out.println(error);
+                    System.exit(1);
+                }
+                else {
+                    int NEW_PRODUCTION = SyntacticEnvironment.PARSING_TABLE[symbolsStack.peek()-100][readToken];
+                    ArrayList<Integer> NEW_SYMBOL = SyntacticEnvironment.PRODUCTION_RULES[NEW_PRODUCTION];
+                    symbolsStack.pop();
+                    if(NEW_SYMBOL.size() > 0) {
+                        for(int i=NEW_SYMBOL.size()-1; i>=0; i--) {
+                            symbolsStack.push(NEW_SYMBOL.get(i));
+                        }
+                    }
+                }
+            }
+
+            if(symbolsStack.peek() == SyntacticEnvironment.DOLAR && (sequenceOfTokens.get(currentToken)[0].equals(SyntacticEnvironment.DOLAR))) {
+                System.out.println("Syntactic Analysis passed successfully");
+            } 
+            else {
+                System.out.println("Error during the syntactic analysis");
+            }
         }
         // If the invocation of the FileManager's readFile() method throws an exception indicating that 
         // it was not possible to open the file, print the corresponding error and finish the execution 
