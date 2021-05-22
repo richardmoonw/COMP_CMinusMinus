@@ -192,6 +192,7 @@ public class Compiler {
 
             
             // SYNTACTIC ANALYSIS STARTING POINT.
+            System.out.println("------------------------------------------------");
 
             // Add the $ token at the end of the token sequence in order to be able to determine whether a program has been fully read or not.
             Object[] end_token = new Object[2];
@@ -213,9 +214,23 @@ public class Compiler {
             int currentToken = 0;
             int readToken = 0;
             String error;
+            int previousRule = 0;
+            SyntacticEnvironment.initializeSemantics(CompilerEnvironment.getIdentifierSymbolTable().size(), CompilerEnvironment.getNumberSymbolTable().size());
+
+            // New symbol tables updated with the corresponding semantical tags.
+            Object[][] IDENTIFIER_SYMBOL_TABLE = new Object[CompilerEnvironment.getIdentifierSymbolTable().size()][3];
+            Object[][] NUMBER_SYMBOL_TABLE = new Object[CompilerEnvironment.getNumberSymbolTable().size()][2];
+
             while(symbolsStack.peek() != SyntacticEnvironment.DOLAR) {
                 readToken = (int) sequenceOfTokens.get(currentToken)[0];
                 if (symbolsStack.peek() < 100 && (symbolsStack.peek() == readToken)) {
+                    if ((int) sequenceOfTokens.get(currentToken)[0] == SyntacticEnvironment.IDENTIFIER) {
+                        SyntacticEnvironment.updateSymbolsTable(sequenceOfTokens.get(currentToken), sequenceOfTokens.get(currentToken + 1));
+                        SyntacticEnvironment.updateSymbolsTable2(sequenceOfTokens.get(currentToken), previousRule);
+                    } else if((int) sequenceOfTokens.get(currentToken)[0] == SyntacticEnvironment.NUMBER) {
+                        SyntacticEnvironment.updateNumbersSymbolTable(sequenceOfTokens.get(currentToken));
+                    }
+                    
                     symbolsStack.pop();
                     currentToken++;
                 }
@@ -233,7 +248,7 @@ public class Compiler {
                 else {
                     int NEW_PRODUCTION = SyntacticEnvironment.PARSING_TABLE[symbolsStack.peek()-100][readToken];
                     ArrayList<Integer> NEW_SYMBOL = SyntacticEnvironment.PRODUCTION_RULES[NEW_PRODUCTION];
-                    symbolsStack.pop();
+                    previousRule = symbolsStack.pop();
                     if(NEW_SYMBOL.size() > 0) {
                         for(int i=NEW_SYMBOL.size()-1; i>=0; i--) {
                             symbolsStack.push(NEW_SYMBOL.get(i));
@@ -243,6 +258,26 @@ public class Compiler {
             }
 
             if(symbolsStack.peek() == SyntacticEnvironment.DOLAR && (sequenceOfTokens.get(currentToken)[0].equals(SyntacticEnvironment.DOLAR))) {
+                ArrayList<String> identifiers = CompilerEnvironment.getIdentifierSymbolTable();
+                ArrayList<Integer> numbers = CompilerEnvironment.getNumberSymbolTable();
+
+                for(int i=0; i< identifiers.size(); i++) {
+                    IDENTIFIER_SYMBOL_TABLE[i][0] = identifiers.get(i);
+                    IDENTIFIER_SYMBOL_TABLE[i][1] = SyntacticEnvironment.getIdentifierSemantics(i, 0);
+                    IDENTIFIER_SYMBOL_TABLE[i][2] = SyntacticEnvironment.getIdentifierSemantics(i, 1);
+
+                    if((int) IDENTIFIER_SYMBOL_TABLE[i][2] == 0) {
+                        System.out.println(String.format("Semantic error: The function/variable %s is used but never defined", IDENTIFIER_SYMBOL_TABLE[i][0]));
+                        System.exit(1);
+                    }
+                }
+
+                for(int i=0; i< numbers.size(); i++) {
+                    NUMBER_SYMBOL_TABLE[i][0] = numbers.get(i);
+                    NUMBER_SYMBOL_TABLE[i][1] = SyntacticEnvironment.getNumberSemantics(i);
+                }
+                SyntacticEnvironment.printSymbolsTable(IDENTIFIER_SYMBOL_TABLE, 0);
+                SyntacticEnvironment.printSymbolsTable(NUMBER_SYMBOL_TABLE, 1);
                 System.out.println("Syntactic Analysis passed successfully");
             } 
             else {

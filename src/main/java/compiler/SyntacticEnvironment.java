@@ -8,6 +8,17 @@ implementation of some important data structures as the TBD.
 import java.util.*;
 
 public class SyntacticEnvironment {
+
+  // Semantic constant values declaration
+  private static final int NUMERIC_CONSTANT = 1;
+
+  private static final int VARIABLE_ID = 1;
+  private static final int FUNCTION_ID = 2;
+  private static final int VARIABLE_AND_FUNCTION_ID = 3;
+
+  private static final int LOCAL_SCOPE = 1;
+  private static final int GLOBAL_SCOPE = 2;
+  private static final int LOCAL_AND_GLOBAL_SCOPE = 3;  
   
   // # Row of the LL(1) parsing table for each given non terminal symbol of the grammar
   private static final int NON_TERMINAL_SYMBOLS_OFFSET = 100;
@@ -55,8 +66,8 @@ public class SyntacticEnvironment {
   private static int ARGS_LIST_PRIME = NON_TERMINAL_SYMBOLS_OFFSET + 41;
 
   // # Column of the LL(1) parsing table for each given terminal symbol of the grammar.
-  private static int IDENTIFIER = 0;
-  private static int NUMBER = 1;
+  public static int IDENTIFIER = 0;
+  public static int NUMBER = 1;
   private static int DIVISION = 2;
   private static int MULTIPLICATION = 3;
   private static int ADDITION = 4;
@@ -133,48 +144,48 @@ public class SyntacticEnvironment {
   public static final int ER42 = -42;   /* ARGS_LIST_PRIME ERROR */
 
   // Syntactical error messages definition.
-  private static String ERM1 = "ERROR: Wrong variable or function definition. int or void were expected, but it was obtained %s";                      /* PROGRAM ERROR */
-  private static String ERM2 = "ERROR: Wrong variable or function definition. int, void or EOF were expected, but it was obtained %s";                 /* DECLARATION_LIST_PRIME ERROR */      
-  private static String ERM3 = "ERROR: Wrong variable or function definition. int or void were expected, but it was obtained %s";                      /* DECLARATION ERROR */ 
-  private static String ERM4 = "ERROR: Wrong int variable or function definition. ;, ( or [ were expected,  but it was obtained %s";                   /* DECLARATION_PRIME ERROR */ 
-  private static String ERM5 = "ERROR: Wrong void function definition. { was expected, but it was obtained %s";                                        /* DECLARATION_BIPRIME ERROR */ 
-  private static String ERM6 = "ERROR: Wrong void function definition. } or return were expected, but it was obtained %s";                             /* DECLARATION_TRIPRIME ERROR */ 
-  private static String ERM7 = "ERROR: Wrong variable definition. int was expected, but it was obtained %s";                                           /* VAR_DECLARATION ERROR */ 
-  private static String ERM8 = "ERROR: Wrong variable definition. ; or [ were expected, but it was obtained %s";                                       /* VAR_DECLARATION_PRIME ERROR */ 
-  private static String ERM9 = "ERROR: Wrong function's params definition. int or void were expected, but it was obtained %s";                         /* PARAMS ERROR */ 
-  private static String ERM10 = "ERROR: Wrong function's param list definition. , or ) were expected, but it was obtained %s";                         /* PARAM_LIST_PRIME ERROR */ 
-  private static String ERM11 = "ERROR: Wrong function's param definition. int was expected, but it was obtained %s";                                  /* PARAM ERROR */ 
-  private static String ERM12 = "ERROR: Wrong function's param definition. ,, ) or [ were expected, but it was obtained %s";                           /* PARAM_PRIME ERROR */ 
-  private static String ERM13 = "ERROR: Wrong statement declaration. ID, {, if, return, while, input or output were expected, but it was obtained %s"; /* COMPOUND_STMT ERROR */ 
-  private static String ERM14 = "ERROR: Wrong enclosed declaration. } or return were expected, but it was obtained %s";                                /* COMPOUND_STMT_PRIME ERROR */ 
-  private static String ERM15 = "ERROR: Wrong assignment or function call definition. =, (, [ were expected, but it was obtained %s";                  /* COMPOUND_STMT_BIPRIME ERROR */
-                                                                                                                                                       /* STATEMENT_PRIME ERROR */ 
-  private static String ERM16 = "ERROR: Wrong if statement definition. ID, else, if, return, while, input or output were expected, but it was obtained %s";       /* COMPOUND_STMT_TRIPRIME ERROR */ 
-  private static String ERM17 = "ERROR: Wrong return definition. ID, NUM, ; or ( were expected, but it was obtained %s";                               /* COMPOUND_STMT_POLYPRIME ERROR */ 
-  private static String ERM18 = "ERROR: Wrong int function definition. { was expected, but it was obtained %s";                                        /* COMPOUND_STMT_RET ERROR */ 
-  private static String ERM19 = "ERROR: Wrong local declarations. ID, }, if, int, return, while, input or output were expected, but it was obtained %s";    /* LOCAL_DECLARATIONS ERROR */
-                                                                                                                                                            /* LOCAL_DECLARATIONS_PRIME ERROR */
-  private static String ERM20 = "ERROR: Wrong statement list definition. ID, }, if, int, return, while, input or output were expected, but it was obtained %s";   /* STATEMENT_LIST ERROR */
+  private static String ERM1 = "ERROR: Wrong variable or function definition. int or void are the possible options, but it was obtained %s";                      /* PROGRAM ERROR */
+  private static String ERM2 = "ERROR: Wrong variable or function definition. int, void or EOF are the possible options, but it was obtained %s";                 /* DECLARATION_LIST_PRIME ERROR */      
+  private static String ERM3 = "ERROR: Wrong variable or function definition. int or void are the possible options, but it was obtained %s";                      /* DECLARATION ERROR */ 
+  private static String ERM4 = "ERROR: Wrong int variable or function definition. ;, ( or [ are the possible options,  but it was obtained %s";                   /* DECLARATION_PRIME ERROR */ 
+  private static String ERM5 = "ERROR: Wrong void function definition. { is the possible option, but it was obtained %s";                                         /* DECLARATION_BIPRIME ERROR */ 
+  private static String ERM6 = "ERROR: Wrong void function definition. } or return are the possible options, but it was obtained %s";                             /* DECLARATION_TRIPRIME ERROR */ 
+  private static String ERM7 = "ERROR: Wrong variable definition. int is the possible option, but it was obtained %s";                                            /* VAR_DECLARATION ERROR */ 
+  private static String ERM8 = "ERROR: Wrong variable definition. ; or [ are the possible options, but it was obtained %s";                                       /* VAR_DECLARATION_PRIME ERROR */ 
+  private static String ERM9 = "ERROR: Wrong function's params definition. int or void are the possible options, but it was obtained %s";                         /* PARAMS ERROR */ 
+  private static String ERM10 = "ERROR: Wrong function's param list definition. , or ) are the possible options, but it was obtained %s";                         /* PARAM_LIST_PRIME ERROR */ 
+  private static String ERM11 = "ERROR: Wrong function's param definition. int is the possible option, but it was obtained %s";                                   /* PARAM ERROR */ 
+  private static String ERM12 = "ERROR: Wrong function's param definition. ,, ) or [ are the possible options, but it was obtained %s";                           /* PARAM_PRIME ERROR */ 
+  private static String ERM13 = "ERROR: Wrong statement declaration. ID, {, if, return, while, input or output are the possible options, but it was obtained %s"; /* COMPOUND_STMT ERROR */ 
+  private static String ERM14 = "ERROR: Wrong enclosed declaration. } or return are the possible options, but it was obtained %s";                                /* COMPOUND_STMT_PRIME ERROR */ 
+  private static String ERM15 = "ERROR: Wrong assignment or function call definition. =, (, [ are the possible options, but it was obtained %s";                  /* COMPOUND_STMT_BIPRIME ERROR */
+                                                                                                                                                                  /* STATEMENT_PRIME ERROR */ 
+  private static String ERM16 = "ERROR: Wrong if statement definition. ID, else, if, return, while, input or output are the possible options, but it was obtained %s";    /* COMPOUND_STMT_TRIPRIME ERROR */ 
+  private static String ERM17 = "ERROR: Wrong return definition. ID, NUM, ; or ( are the possible options, but it was obtained %s";                               /* COMPOUND_STMT_POLYPRIME ERROR */ 
+  private static String ERM18 = "ERROR: Wrong int function definition. { is the possible option, but it was obtained %s";                                         /* COMPOUND_STMT_RET ERROR */ 
+  private static String ERM19 = "ERROR: Wrong local declarations. ID, }, if, int, return, while, input or output are the possible options, but it was obtained %s";       /* LOCAL_DECLARATIONS ERROR */
+                                                                                                                                                                          /* LOCAL_DECLARATIONS_PRIME ERROR */
+  private static String ERM20 = "ERROR: Wrong statement list definition. ID, }, if, int, return, while, input or output are the possible options, but it was obtained %s";   /* STATEMENT_LIST ERROR */
                                                                                                                                                                   /* STATEMENT_LIST_PRIME ERROR */
-  private static String ERM21 = "ERROR: Wrong single statement declaration. ID, if, while, input or output were expected, but it was obtained %s";     /* STATEMENT ERROR */
-  private static String ERM22 = "ERROR: Wrong if statement definition. ID, }, else, if, return, while, input, output were expected, but it was obtained %s";      /* STATEMENT_BIPRIME ERROR */
-  private static String ERM23 = "ERROR: Wrong return definition. return was expected, but it was obtained %s";                                         /* RETURN_STMT ERROR */
-  private static String ERM24 = "ERROR: Wrong return definition. ID, NUM, ; or ( were expected, but it was obtained %s";                               /* RETURN_STMT_PRIME ERROR */
-  private static String ERM25 = "ERROR: Wrong input of variable definition. ID was expected, but it was obtained %s";                                  /* VAR ERROR */
-  private static String ERM26 = "ERROR: Wrong input of variable definition. ; or [ were expected, but it was obtained %s";                             /* VAR_PRIME ERROR */
-  private static String ERM27 = "ERROR: Wrong expression definition. ID, NUM or ( were expected, but it was obtained %s";                              /* EXPRESSION ERROR */
-  private static String ERM28 = "ERROR: Wrong expression definition. <, <=, >, >=, ==, !=, ; or ) were expected, but it was obtained %s";              /* EXPRESSION_PRIME ERROR */
-  private static String ERM29 = "ERROR: Wrong relational operator definition. <, <=, >, >=, ==, != were expected, but it was obtained %s";             /* RELOP ERROR */
-  private static String ERM30 = "ERROR: Wrong operand definition. ID, NUM or ( were expected, but it was obtained %s";                                 /* ARITHMETIC_EXPRESSION ERROR */
-                                                                                                                                                       /* TERM ERROR */
-                                                                                                                                                       /* FACTOR ERROR */
-  private static String ERM31 = "ERROR: Wrong operation definition. +, -, <, <=, >, >=, ==, !=, ;, ,, ) or ] were expected, but it was obtained %s";   /* ARITHMETIC_EXPRESSION_PRIME ERROR */
-  private static String ERM32 = "ERROR: Wrong arithmetic operator definition. + or - were expected, but it was obtained %s";                           /* ADDOP ERROR */
-  private static String ERM33 = "ERROR: Wrong operation definition. /, *, +, -, <, <=, >, >=, ==, !=, ;, ,, ) or ] were expected, but it was obtained %s";        /* TERM_PRIME ERROR */
-  private static String ERM34 = "ERROR: Wrong arithmetic operator definition. / or * were expected, but it was obtained %s";                           /* MULOP ERROR */ 
-  private static String ERM35 = "ERROR: Wrong operand definition. /, *, +, -, <, <=, >, >=, ==, !=, ;, ,, (, ) [ or ] were expected, but it was obtained %s";    /* FACTOR_PRIME ERROR */
-  private static String ERM36 = "ERROR: Wrong function's arguments definition. ID, NUM, (, ) were expected, but it was obtained %s";                   /* ARGS ERROR */
-  private static String ERM37 = "ERROR: Wrong function's argument list definition. , or ) were expected, but it was obtained %s";                      /* ARGS_LIST_PRIME ERROR */
+  private static String ERM21 = "ERROR: Wrong single statement declaration. ID, if, while, input or output are the possible options, but it was obtained %s";     /* STATEMENT ERROR */
+  private static String ERM22 = "ERROR: Wrong if statement definition. ID, }, else, if, return, while, input, output are the possible options, but it was obtained %s";      /* STATEMENT_BIPRIME ERROR */
+  private static String ERM23 = "ERROR: Wrong return definition. return is the possible option, but it was obtained %s";                                          /* RETURN_STMT ERROR */
+  private static String ERM24 = "ERROR: Wrong return definition. ID, NUM, ; or ( are the possible options, but it was obtained %s";                               /* RETURN_STMT_PRIME ERROR */
+  private static String ERM25 = "ERROR: Wrong input of variable definition. ID is the possible option, but it was obtained %s";                                   /* VAR ERROR */
+  private static String ERM26 = "ERROR: Wrong input of variable definition. ; or [ are the possible options, but it was obtained %s";                             /* VAR_PRIME ERROR */
+  private static String ERM27 = "ERROR: Wrong expression definition. ID, NUM or ( are the possible options, but it was obtained %s";                              /* EXPRESSION ERROR */
+  private static String ERM28 = "ERROR: Wrong expression definition. <, <=, >, >=, ==, !=, ; or ) are the possible options, but it was obtained %s";              /* EXPRESSION_PRIME ERROR */
+  private static String ERM29 = "ERROR: Wrong relational operator definition. <, <=, >, >=, ==, != are the possible options, but it was obtained %s";             /* RELOP ERROR */
+  private static String ERM30 = "ERROR: Wrong operand definition. ID, NUM or ( are the possible options, but it was obtained %s";                                 /* ARITHMETIC_EXPRESSION ERROR */
+                                                                                                                                                                  /* TERM ERROR */
+                                                                                                                                                                  /* FACTOR ERROR */
+  private static String ERM31 = "ERROR: Wrong operation definition. +, -, <, <=, >, >=, ==, !=, ;, ,, ) or ] are the possible options, but it was obtained %s";   /* ARITHMETIC_EXPRESSION_PRIME ERROR */
+  private static String ERM32 = "ERROR: Wrong arithmetic operator definition. + or - are the possible options, but it was obtained %s";                           /* ADDOP ERROR */
+  private static String ERM33 = "ERROR: Wrong operation definition. /, *, +, -, <, <=, >, >=, ==, !=, ;, ,, ) or ] are the possible options, but it was obtained %s";        /* TERM_PRIME ERROR */
+  private static String ERM34 = "ERROR: Wrong arithmetic operator definition. / or * are the possible options, but it was obtained %s";                           /* MULOP ERROR */ 
+  private static String ERM35 = "ERROR: Wrong operand definition. /, *, +, -, <, <=, >, >=, ==, !=, ;, ,, (, ) [ or ] are the possible options, but it was obtained %s";     /* FACTOR_PRIME ERROR */
+  private static String ERM36 = "ERROR: Wrong function's arguments definition. ID, NUM, (, ) are the possible options, but it was obtained %s";                   /* ARGS ERROR */
+  private static String ERM37 = "ERROR: Wrong function's argument list definition. , or ) are the possible options, but it was obtained %s";                      /* ARGS_LIST_PRIME ERROR */
 
 
   // Production rules for the final Context Free Grammar.
@@ -601,7 +612,7 @@ public class SyntacticEnvironment {
     { ER35,	ER35,	 ER35, ER35,	 74,   75, ER35, ER35, ER35, ER35, ER35, ER35, ER35, ER35, ER35, ER35, ER35, ER35, ER35, ER35, ER35, ER35, ER35, ER35,	 ER35, ER35,	ER35,	 ER35,	 ER35, ER35  }, /* ADDOP */
     {  76,	  76,	 ER36, ER36, ER36, ER36, ER36, ER36, ER36, ER36, ER36, ER36, ER36, ER36, ER36,	 76, ER36, ER36, ER36, ER36, ER36, ER36, ER36, ER36,	 ER36, ER36,	ER36,	 ER36,	 ER36, ER36  }, /* TERM */
     { ER37,	ER37,	   77,	 77,	 78,   78,	 78,	 78,	 78,	 78, ER37,	 78,	 78,	 78,	 78, ER37,	 78, ER37,	 78, ER37, ER37, ER37, ER37, ER37,	 ER37, ER37,	ER37,	 ER37,	 ER37, ER37  }, /* TERM_PRIME */
-    { ER38,	ER38,	 ER38,	 79,	 80, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38,	 ER38, ER38,	ER38,	 ER38,	 ER38, ER38  }, /* MULOP */
+    { ER38,	ER38,	   80,	 79, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38, ER38,	 ER38, ER38,	ER38,	 ER38,	 ER38, ER38  }, /* MULOP */
     {  82,	  83,	 ER39, ER39, ER39, ER39, ER39, ER39, ER39, ER39, ER39, ER39, ER39, ER39, ER39,	 81, ER39, ER39, ER39, ER39, ER39, ER39, ER39, ER39,	 ER39, ER39,	ER39,	 ER39,	 ER39, ER39  }, /* FACTOR */
     { ER40,	ER40,	   84,	 84,	 84,   84,	 84,	 84,	 84,	 84, ER40,	 84,	 84,	 84,	 84,	 86,	 84,	 85,	 84, ER40, ER40, ER40, ER40, ER40,	 ER40, ER40,	ER40,	 ER40,	 ER40, ER40  }, /* FACTOR_PRIME */
     {  87,	  87,	 ER41, ER41, ER41, ER41, ER41, ER41, ER41, ER41, ER41, ER41, ER41, ER41, ER41,	 87,	 88, ER41, ER41, ER41, ER41, ER41, ER41, ER41,	 ER41, ER41,	ER41,	 ER41,	 ER41, ER41  }, /* ARGS */
@@ -769,7 +780,105 @@ public class SyntacticEnvironment {
         break;
     }
 
-    return errorMessage + String.format(". To correct the error look at your token #%s", currentToken);
+    return errorMessage + String.format(". To correct the error look at the token #%s", currentToken);
+  }
+
+
+  private static int[][] IDENTIFIER_TABLE_SEMANTICS;
+  private static int[] NUMBER_TABLE_SEMANTICS;
+
+  public static void initializeSemantics(int identifierSymbolsTableSize, int numberSymbolsTableSize) {
+    IDENTIFIER_TABLE_SEMANTICS = new int[identifierSymbolsTableSize][2];
+    NUMBER_TABLE_SEMANTICS = new int[numberSymbolsTableSize];
+  }
+
+  public static void setSemantics(int entry, int description, int position) {
+    IDENTIFIER_TABLE_SEMANTICS[entry][position] = description;
+  }
+
+  public static void setNumbersSemantic(int entry, int description) {
+    NUMBER_TABLE_SEMANTICS[entry] = description;
+  }
+
+  public static void updateSymbolsTable(Object[] token, Object[] nextToken) {
+
+    // The identifier is a function name.
+    if((int) token[0] == IDENTIFIER && (int) nextToken[0] == OPEN_PARENTHESIS) {
+      if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][0] == 0) {
+        SyntacticEnvironment.setSemantics((int) token[1], FUNCTION_ID, 0);
+      }
+      else if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][0] == VARIABLE_ID) {
+        SyntacticEnvironment.setSemantics((int) token[1], VARIABLE_AND_FUNCTION_ID, 0);
+      }  
+    } 
+    
+    // The identifier is a variable name.
+    else {
+      if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][0] == 0) {
+        SyntacticEnvironment.setSemantics((int) token[1], VARIABLE_ID, 0);
+      }
+      else if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][0] == FUNCTION_ID) {
+        SyntacticEnvironment.setSemantics((int) token[1], VARIABLE_AND_FUNCTION_ID, 0);
+      }
+    }
+  }
+
+  public static void updateSymbolsTable2(Object[] token, int previousRule) {
+    if (previousRule != DECLARATION && previousRule != VAR_DECLARATION && previousRule != PARAM) {
+      return;
+    }
+    
+    // The identifier is a global declaration
+    if (previousRule == DECLARATION) {
+      if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][1] == 0) {
+        SyntacticEnvironment.setSemantics((int) token[1], GLOBAL_SCOPE, 1);
+      }
+      else if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][1] == LOCAL_SCOPE) {
+        SyntacticEnvironment.setSemantics((int) token[1], LOCAL_AND_GLOBAL_SCOPE, 1);
+      }  
+    }
+
+    // The identifier is a local declaration
+    else {
+      if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][1] == 0) {
+        SyntacticEnvironment.setSemantics((int) token[1], LOCAL_SCOPE, 1);
+      }
+      else if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][1] == GLOBAL_SCOPE) {
+        SyntacticEnvironment.setSemantics((int) token[1], LOCAL_AND_GLOBAL_SCOPE, 1);
+      } 
+    }
+  }
+
+  public static void updateNumbersSymbolTable(Object[] token) {
+    SyntacticEnvironment.setNumbersSemantic((int) token[1], NUMERIC_CONSTANT);
+  }
+
+  public static int getIdentifierSemantics(int index, int category) {
+    return IDENTIFIER_TABLE_SEMANTICS[index][category];
+  }
+
+  public static int getNumberSemantics(int index) {
+    return NUMBER_TABLE_SEMANTICS[index];
+  }
+
+  public static void printSymbolsTable(Object[][] symbolsTable, int type) {
+    if (type == 0) {
+      System.out.println("IDENTIFIERS SYMBOL TABLE UPDATED");
+      System.out.println("Column 1: Identifier. Column 2: Function or variable. Column 3: Local or global declaration");
+      System.out.println("Column 2 > 1: Variable, 2: Function, 3: Both");
+      System.out.println("Column 3 > 1: Local scope, 2: Global scope, 3: Both");
+      for (int i=0; i<symbolsTable.length; i++) {
+        System.out.println(String.format("%s %s %s", symbolsTable[i][0], symbolsTable[i][1], symbolsTable[i][2]));
+      }
+    }
+    else {
+      System.out.println("\nNUMBERS SYMBOL TABLE UPDATED");
+      System.out.println("Column 1: Number. Column 2: Type (only constant is possible).");
+      for (int i=0; i<symbolsTable.length; i++) {
+        System.out.println(String.format("%s %s", symbolsTable[i][0], symbolsTable[i][1]));
+      }
+    }
+    
   }
   
 }
