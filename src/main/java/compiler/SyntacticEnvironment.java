@@ -9,12 +9,23 @@ import java.util.*;
 
 public class SyntacticEnvironment {
 
-  // Semantic constant values declaration
-  private static final int NUMERIC_CONSTANT = 1;
+  // Arrays used to store the semantic tags for the different identifiers and numbers found in the source code.
+  private static int[][] IDENTIFIERS_SEMANTIC_SYMBOL_TABLE;
+  private static int[] NUMBERS_SEMANTIC_SYMBOL_TABLE;
 
-  private static final int VARIABLE_ID = 1;
-  private static final int FUNCTION_ID = 2;
-  private static final int VARIABLE_AND_FUNCTION_ID = 3;
+  // Constant values definition for the different semantic tags.
+  public static final int IDENTIFIERS_SYMBOL_TABLE_NUMBER = 0;
+  public static final int NUMBERS_SYMBOL_TABLE_NUMBER =1;
+
+  private static final int UNDEFINED = 0;
+  private static final int TOKEN_TYPE = 0;
+  private static final int IDENTIFIER_SCOPE = 1;
+
+  private static final int INTEGER_CONSTANT = 1;
+
+  private static final int VARIABLE_TYPE = 1;
+  private static final int FUNCTION_TYPE = 2;
+  private static final int VARIABLE_AND_FUNCTION_TYPE = 3;
 
   private static final int LOCAL_SCOPE = 1;
   private static final int GLOBAL_SCOPE = 2;
@@ -783,97 +794,143 @@ public class SyntacticEnvironment {
     return errorMessage + String.format(". To correct the error look at the token #%s", currentToken);
   }
 
-
-  private static int[][] IDENTIFIER_TABLE_SEMANTICS;
-  private static int[] NUMBER_TABLE_SEMANTICS;
-
+  // Method used to initialize either the identifiers' semantic symbol table or the numbers' semantic symbol table with the
+  // size of their equivalents obtained during the lexical analysis.
   public static void initializeSemantics(int identifierSymbolsTableSize, int numberSymbolsTableSize) {
-    IDENTIFIER_TABLE_SEMANTICS = new int[identifierSymbolsTableSize][2];
-    NUMBER_TABLE_SEMANTICS = new int[numberSymbolsTableSize];
+    IDENTIFIERS_SEMANTIC_SYMBOL_TABLE = new int[identifierSymbolsTableSize][2];
+    NUMBERS_SEMANTIC_SYMBOL_TABLE = new int[numberSymbolsTableSize];
   }
 
-  public static void setSemantics(int entry, int description, int position) {
-    IDENTIFIER_TABLE_SEMANTICS[entry][position] = description;
+  // Method used to assign the corresponding semantic tags to any entrance within the identifiers' semantic symbol table.
+  private static void setIdentifierSemantics(int entry, int position, int description) {
+    IDENTIFIERS_SEMANTIC_SYMBOL_TABLE[entry][position] = description;
   }
 
-  public static void setNumbersSemantic(int entry, int description) {
-    NUMBER_TABLE_SEMANTICS[entry] = description;
+  // Method used to assign the corresponding semantic tags to any entrance within the numbers' semantic symbol table.
+  private static void setNumberSemantic(int entry, int description) {
+    NUMBERS_SEMANTIC_SYMBOL_TABLE[entry] = description;
   }
 
-  public static void updateSymbolsTable(Object[] token, Object[] nextToken) {
+  // Method used to assign the proper semantic tag (according to token type) to a given entry of the identifiers' symbol
+  // table. 
+  public static void assignTokenTypeToIdentifiers(Object[] token, Object[] nextToken) {
 
-    // The identifier is a function name.
+    // Retrieve the pointer to the entry to the identifiers' symbol table from the current token.
+    int symbolTableEntry = (int) token[1];
+
+    // If the current token is an identifier and the next available token is a parenthesis, then evaluate the identifier as a
+    // function name.
     if((int) token[0] == IDENTIFIER && (int) nextToken[0] == OPEN_PARENTHESIS) {
-      if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][0] == 0) {
-        SyntacticEnvironment.setSemantics((int) token[1], FUNCTION_ID, 0);
+
+      // If the identifier type has not been defined, then assign a tag to indicate that the identifier is a function name.
+      if(IDENTIFIERS_SEMANTIC_SYMBOL_TABLE[symbolTableEntry][TOKEN_TYPE] == UNDEFINED) {
+        SyntacticEnvironment.setIdentifierSemantics(symbolTableEntry, TOKEN_TYPE, FUNCTION_TYPE);
       }
-      else if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][0] == VARIABLE_ID) {
-        SyntacticEnvironment.setSemantics((int) token[1], VARIABLE_AND_FUNCTION_ID, 0);
+
+      // If the identifier type has been previously defined as a variable name, then assign a new tag to indicate that the
+      // identifier is a function and a variable name.
+      else if(IDENTIFIERS_SEMANTIC_SYMBOL_TABLE[symbolTableEntry][TOKEN_TYPE] == VARIABLE_TYPE) {
+        SyntacticEnvironment.setIdentifierSemantics(symbolTableEntry, TOKEN_TYPE, VARIABLE_AND_FUNCTION_TYPE);
       }  
     } 
     
-    // The identifier is a variable name.
+    // If the identifier cannot be evaluated as a function name.
     else {
-      if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][0] == 0) {
-        SyntacticEnvironment.setSemantics((int) token[1], VARIABLE_ID, 0);
+
+      // If the identifier type has not been defined, then assign a tag to indicate that the identifier is a variable name.
+      if(IDENTIFIERS_SEMANTIC_SYMBOL_TABLE[symbolTableEntry][TOKEN_TYPE] == UNDEFINED) {
+        SyntacticEnvironment.setIdentifierSemantics(symbolTableEntry, TOKEN_TYPE, VARIABLE_TYPE);
       }
-      else if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][0] == FUNCTION_ID) {
-        SyntacticEnvironment.setSemantics((int) token[1], VARIABLE_AND_FUNCTION_ID, 0);
+
+      // If the identifier type has been previously defined as a function name, then assign a new tag to indicate that the 
+      // identifier is a function and a variable name.
+      else if(IDENTIFIERS_SEMANTIC_SYMBOL_TABLE[symbolTableEntry][TOKEN_TYPE] == FUNCTION_TYPE) {
+        SyntacticEnvironment.setIdentifierSemantics(symbolTableEntry, TOKEN_TYPE, VARIABLE_AND_FUNCTION_TYPE);
       }
     }
   }
 
-  public static void updateSymbolsTable2(Object[] token, int previousRule) {
+  // Method used to assign the proper semantic tag (according to token scope) to a given entry of the identifiers'
+  // symbol table.
+  public static void assignTokenScopeToIdentifiers(Object[] token, int previousRule) {
+
+    // Retrieve the pointer to the entry to the identifiers' symbol table from the current token.
+    int symbolTableEntry = (int) token[1];
+
+    // If the identifier is not get from a global, local or param declaration rule of the Context Free Grammar, then exit the 
+    // function. A scope is only assigned to a variable in the moment it is declared. 
     if (previousRule != DECLARATION && previousRule != VAR_DECLARATION && previousRule != PARAM) {
       return;
     }
     
-    // The identifier is a global declaration
+    // If the current token is being compared to the appereance of an identifier in a global declaration rule of the Context Free Grammar.
     if (previousRule == DECLARATION) {
-      if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][1] == 0) {
-        SyntacticEnvironment.setSemantics((int) token[1], GLOBAL_SCOPE, 1);
+
+      // If the identifier scope has not been defined, then assign a tag to indicate that the identifier scope is global.
+      if(IDENTIFIERS_SEMANTIC_SYMBOL_TABLE[symbolTableEntry][IDENTIFIER_SCOPE] == UNDEFINED) {
+        SyntacticEnvironment.setIdentifierSemantics(symbolTableEntry, IDENTIFIER_SCOPE, GLOBAL_SCOPE);
       }
-      else if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][1] == LOCAL_SCOPE) {
-        SyntacticEnvironment.setSemantics((int) token[1], LOCAL_AND_GLOBAL_SCOPE, 1);
+
+      // If the identifier scope has been previously defined as local, then assign a new tag to indicate that the identifier scope is
+      // global and local.
+      else if(IDENTIFIERS_SEMANTIC_SYMBOL_TABLE[symbolTableEntry][IDENTIFIER_SCOPE] == LOCAL_SCOPE) {
+        SyntacticEnvironment.setIdentifierSemantics(symbolTableEntry, IDENTIFIER_SCOPE, LOCAL_AND_GLOBAL_SCOPE);
       }  
     }
 
-    // The identifier is a local declaration
+    // If the current token is being compared to the appereance of an identifier in a local or param declaration rule of the Context Free Grammar.
     else {
-      if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][1] == 0) {
-        SyntacticEnvironment.setSemantics((int) token[1], LOCAL_SCOPE, 1);
+
+      // If the identifier scope has not been defined, then assign a tag to indicate that the identifier scope is local.
+      if(IDENTIFIERS_SEMANTIC_SYMBOL_TABLE[symbolTableEntry][IDENTIFIER_SCOPE] == UNDEFINED) {
+        SyntacticEnvironment.setIdentifierSemantics(symbolTableEntry, IDENTIFIER_SCOPE, LOCAL_SCOPE);
       }
-      else if(IDENTIFIER_TABLE_SEMANTICS[(int) token[1]][1] == GLOBAL_SCOPE) {
-        SyntacticEnvironment.setSemantics((int) token[1], LOCAL_AND_GLOBAL_SCOPE, 1);
+
+      // If the identifier scope has been previously defined as global, then assign a new tag to indicate that the identifier scope is
+      // global and local.
+      else if(IDENTIFIERS_SEMANTIC_SYMBOL_TABLE[symbolTableEntry][IDENTIFIER_SCOPE] == GLOBAL_SCOPE) {
+        SyntacticEnvironment.setIdentifierSemantics(symbolTableEntry, IDENTIFIER_SCOPE, LOCAL_AND_GLOBAL_SCOPE);
       } 
     }
   }
 
-  public static void updateNumbersSymbolTable(Object[] token) {
-    SyntacticEnvironment.setNumbersSemantic((int) token[1], NUMERIC_CONSTANT);
+  // Method used to assign the proper semantic tag (according to token type) to a given entry of the numbers'
+  // symbol table. For the syntactic analyzer being developed, the only available token type for numeric values 
+  // is an integer constant.
+  // constant
+  public static void assignTokenTypeToNumbers(Object[] token) {
+    SyntacticEnvironment.setNumberSemantic((int) token[1], INTEGER_CONSTANT);
   }
 
-  public static int getIdentifierSemantics(int index, int category) {
-    return IDENTIFIER_TABLE_SEMANTICS[index][category];
+  // Method used to obtain the whole semantic symbol table for identifiers.
+  public static int getIdentifiersSemanticSymbolTable(int index, int category) {
+    return IDENTIFIERS_SEMANTIC_SYMBOL_TABLE[index][category];
   }
 
-  public static int getNumberSemantics(int index) {
-    return NUMBER_TABLE_SEMANTICS[index];
+  // Method used to obtain the whole semantic symbol table for numbers.
+  public static int getNumbersSemanticSymbolTable(int index) {
+    return NUMBERS_SEMANTIC_SYMBOL_TABLE[index];
   }
 
+  // Method used to print either the updated symbols' table for identifiers or numbers.
   public static void printSymbolsTable(Object[][] symbolsTable, int type) {
-    if (type == 0) {
+
+    // If the symbols' table to be printed is for the identifiers.
+    if (type == IDENTIFIERS_SYMBOL_TABLE_NUMBER) {
       System.out.println("IDENTIFIERS SYMBOL TABLE UPDATED");
-      System.out.println("Column 1: Identifier. Column 2: Function or variable. Column 3: Local or global declaration");
-      System.out.println("Column 2 > 1: Variable, 2: Function, 3: Both");
-      System.out.println("Column 3 > 1: Local scope, 2: Global scope, 3: Both");
+      System.out.println("Identifier => column 1. \nIdentifier type => column 2. \nIdentifier scope => column 3.");
+      System.out.println("- Identifier type. \n--- 1 => Variable. \n--- 2 => Function. \n--- 3 => Variable/function");
+      System.out.println("- Identifier scope. \n--- 1 => Local. \n--- 2 => Global. \n--- 3 => Local/global");
       for (int i=0; i<symbolsTable.length; i++) {
         System.out.println(String.format("%s %s %s", symbolsTable[i][0], symbolsTable[i][1], symbolsTable[i][2]));
       }
     }
+
+    // If the symbols' table to be printed is for the numbers.
     else {
-      System.out.println("\nNUMBERS SYMBOL TABLE UPDATED");
-      System.out.println("Column 1: Number. Column 2: Type (only constant is possible).");
+      System.out.println("NUMBERS SYMBOL TABLE UPDATED");
+      System.out.println("Number => column 1. \nNumber type => column 2");
+      System.out.println("- Number type. \n--- 1 => Integer");
       for (int i=0; i<symbolsTable.length; i++) {
         System.out.println(String.format("%s %s", symbolsTable[i][0], symbolsTable[i][1]));
       }

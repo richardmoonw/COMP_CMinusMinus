@@ -192,7 +192,7 @@ public class Compiler {
 
             
             // SYNTACTIC ANALYSIS STARTING POINT.
-            System.out.println("------------------------------------------------");
+            System.out.println("\n------------------------------------------------\n");
 
             // Add the $ token at the end of the token sequence in order to be able to determine whether a program has been fully read or not.
             Object[] end_token = new Object[2];
@@ -225,10 +225,10 @@ public class Compiler {
                 readToken = (int) sequenceOfTokens.get(currentToken)[0];
                 if (symbolsStack.peek() < 100 && (symbolsStack.peek() == readToken)) {
                     if ((int) sequenceOfTokens.get(currentToken)[0] == SyntacticEnvironment.IDENTIFIER) {
-                        SyntacticEnvironment.updateSymbolsTable(sequenceOfTokens.get(currentToken), sequenceOfTokens.get(currentToken + 1));
-                        SyntacticEnvironment.updateSymbolsTable2(sequenceOfTokens.get(currentToken), previousRule);
+                        SyntacticEnvironment.assignTokenTypeToIdentifiers(sequenceOfTokens.get(currentToken), sequenceOfTokens.get(currentToken + 1));
+                        SyntacticEnvironment.assignTokenScopeToIdentifiers(sequenceOfTokens.get(currentToken), previousRule);
                     } else if((int) sequenceOfTokens.get(currentToken)[0] == SyntacticEnvironment.NUMBER) {
-                        SyntacticEnvironment.updateNumbersSymbolTable(sequenceOfTokens.get(currentToken));
+                        SyntacticEnvironment.assignTokenTypeToNumbers(sequenceOfTokens.get(currentToken));
                     }
                     
                     symbolsStack.pop();
@@ -263,8 +263,8 @@ public class Compiler {
 
                 for(int i=0; i< identifiers.size(); i++) {
                     IDENTIFIER_SYMBOL_TABLE[i][0] = identifiers.get(i);
-                    IDENTIFIER_SYMBOL_TABLE[i][1] = SyntacticEnvironment.getIdentifierSemantics(i, 0);
-                    IDENTIFIER_SYMBOL_TABLE[i][2] = SyntacticEnvironment.getIdentifierSemantics(i, 1);
+                    IDENTIFIER_SYMBOL_TABLE[i][1] = SyntacticEnvironment.getIdentifiersSemanticSymbolTable(i, 0);
+                    IDENTIFIER_SYMBOL_TABLE[i][2] = SyntacticEnvironment.getIdentifiersSemanticSymbolTable(i, 1);
 
                     if((int) IDENTIFIER_SYMBOL_TABLE[i][2] == 0) {
                         System.out.println(String.format("Semantic error: The function/variable %s is used but never defined", IDENTIFIER_SYMBOL_TABLE[i][0]));
@@ -274,9 +274,10 @@ public class Compiler {
 
                 for(int i=0; i< numbers.size(); i++) {
                     NUMBER_SYMBOL_TABLE[i][0] = numbers.get(i);
-                    NUMBER_SYMBOL_TABLE[i][1] = SyntacticEnvironment.getNumberSemantics(i);
+                    NUMBER_SYMBOL_TABLE[i][1] = SyntacticEnvironment.getNumbersSemanticSymbolTable(i);
                 }
                 SyntacticEnvironment.printSymbolsTable(IDENTIFIER_SYMBOL_TABLE, 0);
+                System.out.println();
                 SyntacticEnvironment.printSymbolsTable(NUMBER_SYMBOL_TABLE, 1);
                 System.out.println("Syntactic Analysis passed successfully");
             } 
