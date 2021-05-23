@@ -17,7 +17,7 @@ public class SyntacticEnvironment {
   public static final int IDENTIFIERS_SYMBOL_TABLE_NUMBER = 0;
   public static final int NUMBERS_SYMBOL_TABLE_NUMBER =1;
 
-  private static final int UNDEFINED = 0;
+  public static final int UNDEFINED = 0;
   private static final int TOKEN_TYPE = 0;
   private static final int IDENTIFIER_SCOPE = 1;
 
@@ -107,6 +107,7 @@ public class SyntacticEnvironment {
   private static int INPUT = 27;
   private static int OUTPUT = 28;
   public static int DOLAR = 29;
+  public static int TERMINALS_HIGHER_BOUND = 100;
   
   // Different error numeric constants definition. The following variables only determine a numeric error value for the different possible
   // errors during the syntactic analysis, the explanation for each error is defined later on the code.

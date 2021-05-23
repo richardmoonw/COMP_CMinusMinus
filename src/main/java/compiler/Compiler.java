@@ -194,7 +194,8 @@ public class Compiler {
             // SYNTACTIC ANALYSIS STARTING POINT.
             System.out.println("\n------------------------------------------------\n");
 
-            // Add the $ token at the end of the token sequence in order to be able to determine whether a program has been fully read or not.
+            // Add the $ token at the end of the sequence of tokens in order to be able to determine whether a program has been fully syntactically analized 
+            // or not.
             Object[] end_token = new Object[2];
             end_token[0] = CompilerEnvironment.getTokenId("$");
             end_token[1] = "";
@@ -205,84 +206,135 @@ public class Compiler {
             // grammar.
             Stack<Integer> symbolsStack = new Stack<>();
 
-            // Add the $ symbol as the first element of the stack of symbols in order to determine whether the syntactic analysis can be finished or not.
+            // Add the $ symbol as the first element of the stack of symbols in order to determine whether the syntactic analysis is finished or not.
             symbolsStack.push(SyntacticEnvironment.DOLAR);
 
-            // Add the start symbol of the CFG to start the syntactic analysis over the sequence of tokens.
+            // Add the starting symbol of the CFG to start the syntactic analysis over the sequence of tokens.
             symbolsStack.push(SyntacticEnvironment.PROGRAM);
 
-            int currentToken = 0;
+            // Define the variables that will be used while performing the syntactic analysis over the sequence of tokens.
+            Object[] currentToken = new Object[2];
+            int currentTokenCounter = 0;
             int readToken = 0;
-            String error;
             int previousRule = 0;
-            SyntacticEnvironment.initializeSemantics(CompilerEnvironment.getIdentifierSymbolTable().size(), CompilerEnvironment.getNumberSymbolTable().size());
-
-            // New symbol tables updated with the corresponding semantical tags.
+            String error;
+            int newProduction;
+            ArrayList<Integer> newSymbols;
+            
+            // Declare and initialize the variables that will be used during the syntactic analysis to record the updates related to
+            // semantic tags in the identifiers' and numbers' symbol tables.
             Object[][] IDENTIFIER_SYMBOL_TABLE = new Object[CompilerEnvironment.getIdentifierSymbolTable().size()][3];
             Object[][] NUMBER_SYMBOL_TABLE = new Object[CompilerEnvironment.getNumberSymbolTable().size()][2];
+            SyntacticEnvironment.initializeSemantics(CompilerEnvironment.getIdentifierSymbolTable().size(), CompilerEnvironment.getNumberSymbolTable().size());
 
+            // While the element at the top of the stack is not the $ token (EOF).
             while(symbolsStack.peek() != SyntacticEnvironment.DOLAR) {
-                readToken = (int) sequenceOfTokens.get(currentToken)[0];
-                if (symbolsStack.peek() < 100 && (symbolsStack.peek() == readToken)) {
-                    if ((int) sequenceOfTokens.get(currentToken)[0] == SyntacticEnvironment.IDENTIFIER) {
-                        SyntacticEnvironment.assignTokenTypeToIdentifiers(sequenceOfTokens.get(currentToken), sequenceOfTokens.get(currentToken + 1));
-                        SyntacticEnvironment.assignTokenScopeToIdentifiers(sequenceOfTokens.get(currentToken), previousRule);
-                    } else if((int) sequenceOfTokens.get(currentToken)[0] == SyntacticEnvironment.NUMBER) {
-                        SyntacticEnvironment.assignTokenTypeToNumbers(sequenceOfTokens.get(currentToken));
+
+                // Read the next token available within the sequence of tokens.
+                currentToken = sequenceOfTokens.get(currentTokenCounter);
+                readToken = (int) currentToken[0];
+
+                // If the element at the top of the stack is a terminal symbol, and it is equal to the current token.
+                if (symbolsStack.peek() < SyntacticEnvironment.TERMINALS_HIGHER_BOUND && (symbolsStack.peek() == readToken)) {
+
+                    // If the current token is an identifier. Determine whether it is a variable, function or variable/function name,
+                    // and whether it has a local, global or local/global scope and add that properties to the identifiers' symbols 
+                    // table.
+                    if ((int) currentToken[0] == SyntacticEnvironment.IDENTIFIER) {
+                        SyntacticEnvironment.assignTokenTypeToIdentifiers(currentToken, sequenceOfTokens.get(currentTokenCounter + 1));
+                        SyntacticEnvironment.assignTokenScopeToIdentifiers(currentToken, previousRule);
+                    } 
+                    
+                    // If the current token is a number. Add the corresponding number type property to the numbers' symbol table.
+                    else if((int) currentToken[0] == SyntacticEnvironment.NUMBER) {
+                        SyntacticEnvironment.assignTokenTypeToNumbers(currentToken);
                     }
                     
+                    // Remove the symbol at the top of the stack from it and increment the current token counter by 1.
                     symbolsStack.pop();
-                    currentToken++;
+                    currentTokenCounter++;
                 }
-                // The current symbol is terminal but it is not the one at the peek of the stack
-                else if(symbolsStack.peek() < 100 && (symbolsStack.peek() != readToken)) {
-                    System.out.println(String.format("Unexpected token found. It was expected a %s, but it was obtained a %s. To correct the error look at your token #%s",
-                        SyntacticEnvironment.TOKENS[symbolsStack.peek()], SyntacticEnvironment.TOKENS[readToken], currentToken));
+
+                // If the element at the top of the stack is a terminal, but it is not equal to the current token, print the corresponding
+                // error message and finish the execution of the program.
+                else if(symbolsStack.peek() < SyntacticEnvironment.TERMINALS_HIGHER_BOUND && (symbolsStack.peek() != readToken)) {
+                    System.out.println(String.format("ERROR: Unexpected token found. It was expected a %s, but it was obtained a %s. To correct the error look at your token #%s",
+                        SyntacticEnvironment.TOKENS[symbolsStack.peek()], SyntacticEnvironment.TOKENS[readToken], currentTokenCounter));
                     System.exit(1);
                 }
-                else if(SyntacticEnvironment.PARSING_TABLE[symbolsStack.peek()-100][readToken] < SyntacticEnvironment.ERROR_LIMIT) {
-                    error = SyntacticEnvironment.getErrorDescription(SyntacticEnvironment.PARSING_TABLE[symbolsStack.peek()-100][readToken], currentToken, readToken);
+
+                // If the element at the top of the stack is a non-terminal that produces an error according to the value present on the LL(1) parsing table
+                // for that non-terminal symbol and the current token. Then, print the corresponding error message and finish the execution of the program.
+                else if(SyntacticEnvironment.PARSING_TABLE[symbolsStack.peek()-SyntacticEnvironment.TERMINALS_HIGHER_BOUND][readToken] < SyntacticEnvironment.ERROR_LIMIT) {
+                    error = SyntacticEnvironment.getErrorDescription(SyntacticEnvironment.PARSING_TABLE[symbolsStack.peek()-SyntacticEnvironment.TERMINALS_HIGHER_BOUND][readToken], 
+                        currentTokenCounter, readToken);
                     System.out.println(error);
                     System.exit(1);
                 }
+
+                // If the element at the top of the stack is a non-terminal that does not produce an error according to the value present on the LL(1) parsing
+                // table for that non-terminal symbol and the current token. 
                 else {
-                    int NEW_PRODUCTION = SyntacticEnvironment.PARSING_TABLE[symbolsStack.peek()-100][readToken];
-                    ArrayList<Integer> NEW_SYMBOL = SyntacticEnvironment.PRODUCTION_RULES[NEW_PRODUCTION];
+
+                    // Get the number of the new production rule from the LL(1) parsing table.
+                    newProduction = SyntacticEnvironment.PARSING_TABLE[symbolsStack.peek()-SyntacticEnvironment.TERMINALS_HIGHER_BOUND][readToken];
+
+                    // Retrieve the body of the production rule.
+                    newSymbols = SyntacticEnvironment.PRODUCTION_RULES[newProduction];
+
+                    // Remove the symbol at the top of the stack, and insert the terminal and non-terminal symbols that compose the body of the new production
+                    // rule. If there are no symbols within the body of the production rule (there is an epsilon), then just remove the symbol at the top of the 
+                    // stack. 
                     previousRule = symbolsStack.pop();
-                    if(NEW_SYMBOL.size() > 0) {
-                        for(int i=NEW_SYMBOL.size()-1; i>=0; i--) {
-                            symbolsStack.push(NEW_SYMBOL.get(i));
+                    if(newSymbols.size() > 0) {
+                        for(int i=newSymbols.size()-1; i>=0; i--) {
+                            symbolsStack.push(newSymbols.get(i));
                         }
                     }
                 }
             }
 
-            if(symbolsStack.peek() == SyntacticEnvironment.DOLAR && (sequenceOfTokens.get(currentToken)[0].equals(SyntacticEnvironment.DOLAR))) {
+            // If the symbol at the top of the stack and the current token are the $ token (EOF).
+            if(symbolsStack.peek() == SyntacticEnvironment.DOLAR && (currentToken[0].equals(SyntacticEnvironment.DOLAR))) {
+
+                // Retrieve the symbol tables generated during the lexical analysis.
                 ArrayList<String> identifiers = CompilerEnvironment.getIdentifierSymbolTable();
                 ArrayList<Integer> numbers = CompilerEnvironment.getNumberSymbolTable();
 
+                // For each entry of the original identifiers' symbol table.
                 for(int i=0; i< identifiers.size(); i++) {
+
+                    // Merge the corresponding identifier, identifier type and identifier scope in a record of the new and updated identifiers'
+                    // symbols table.
                     IDENTIFIER_SYMBOL_TABLE[i][0] = identifiers.get(i);
                     IDENTIFIER_SYMBOL_TABLE[i][1] = SyntacticEnvironment.getIdentifiersSemanticSymbolTable(i, 0);
                     IDENTIFIER_SYMBOL_TABLE[i][2] = SyntacticEnvironment.getIdentifiersSemanticSymbolTable(i, 1);
 
-                    if((int) IDENTIFIER_SYMBOL_TABLE[i][2] == 0) {
-                        System.out.println(String.format("Semantic error: The function/variable %s is used but never defined", IDENTIFIER_SYMBOL_TABLE[i][0]));
+                    // If the scope of the identifier has not been set, then trigger a semantic error due to use of undefined variable or function.
+                    if((int) IDENTIFIER_SYMBOL_TABLE[i][2] == SyntacticEnvironment.UNDEFINED) {
+                        System.out.println(String.format("SEMANTIC ERROR: The function/variable %s is used but never defined", IDENTIFIER_SYMBOL_TABLE[i][0]));
                         System.exit(1);
                     }
                 }
 
+                // For each entry of the original numbers' table, merge the corresponding number and number type in a record of the new and updated
+                // numbers' symbols table.
                 for(int i=0; i< numbers.size(); i++) {
                     NUMBER_SYMBOL_TABLE[i][0] = numbers.get(i);
                     NUMBER_SYMBOL_TABLE[i][1] = SyntacticEnvironment.getNumbersSemanticSymbolTable(i);
                 }
+
+                // Print the new symbols table that include the identified semantic tags.
                 SyntacticEnvironment.printSymbolsTable(IDENTIFIER_SYMBOL_TABLE, 0);
                 System.out.println();
                 SyntacticEnvironment.printSymbolsTable(NUMBER_SYMBOL_TABLE, 1);
                 System.out.println("Syntactic Analysis passed successfully");
             } 
+
+            // If the symbol at the top of the stack or the current token are not the $ token (EOF), then print the corresponding error message and exit the program.
             else {
-                System.out.println("Error during the syntactic analysis");
+                System.out.println("ERROR: Semantic analysis could not be finished successfully");
+                System.exit(1);
             }
         }
         // If the invocation of the FileManager's readFile() method throws an exception indicating that 
