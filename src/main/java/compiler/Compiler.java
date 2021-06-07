@@ -194,12 +194,18 @@ public class Compiler {
             // SYNTACTIC ANALYSIS STARTING POINT.
             System.out.println("\n------------------------------------------------\n");
 
-            // Add the $ token at the end of the sequence of tokens in order to be able to determine whether a program has been fully syntactically analized 
+            // Add the '$' token at the end of the sequence of tokens in order to be able to determine whether a program has been fully syntactically analized 
             // or not.
             Object[] end_token = new Object[2];
             end_token[0] = CompilerEnvironment.getTokenId("$");
             end_token[1] = "";
             sequenceOfTokens.add(end_token);
+
+            // Declare and initialize the variables that will be used during the syntactic analysis to record the updates related to
+            // semantic tags in the identifiers' and numbers' symbol tables.
+            Object[][] IDENTIFIER_SYMBOL_TABLE = new Object[CompilerEnvironment.getIdentifierSymbolTable().size()][3];
+            Object[][] NUMBER_SYMBOL_TABLE = new Object[CompilerEnvironment.getNumberSymbolTable().size()][2];
+            SyntacticEnvironment.initializeSemantics(CompilerEnvironment.getIdentifierSymbolTable().size(), CompilerEnvironment.getNumberSymbolTable().size());
 
             // Stack used to store the symbols obtained from the different production rules of the CFG according to the tokens read 
             // from the token sequence. Each element of the stack represents the id of an terminal or non-terminal symbol of the 
@@ -220,12 +226,6 @@ public class Compiler {
             String error;
             int newProduction;
             ArrayList<Integer> newSymbols;
-            
-            // Declare and initialize the variables that will be used during the syntactic analysis to record the updates related to
-            // semantic tags in the identifiers' and numbers' symbol tables.
-            Object[][] IDENTIFIER_SYMBOL_TABLE = new Object[CompilerEnvironment.getIdentifierSymbolTable().size()][3];
-            Object[][] NUMBER_SYMBOL_TABLE = new Object[CompilerEnvironment.getNumberSymbolTable().size()][2];
-            SyntacticEnvironment.initializeSemantics(CompilerEnvironment.getIdentifierSymbolTable().size(), CompilerEnvironment.getNumberSymbolTable().size());
 
             // While the element at the top of the stack is not the $ token (EOF).
             while(symbolsStack.peek() != SyntacticEnvironment.DOLAR) {
@@ -333,7 +333,7 @@ public class Compiler {
 
             // If the symbol at the top of the stack or the current token are not the $ token (EOF), then print the corresponding error message and exit the program.
             else {
-                System.out.println("ERROR: Semantic analysis could not be finished successfully");
+                System.out.println("ERROR: Syntactic analysis could not be finished successfully");
                 System.exit(1);
             }
         }
