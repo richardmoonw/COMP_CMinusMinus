@@ -1,0 +1,21 @@
+void main(void) {
+  int a;
+  int b;
+  int c;
+  int d;
+  int e[3];
+
+  a = 15;
+  b = 16;
+  c = 17;
+  d = 18;
+
+  if((a+d) == (b+c)) {
+    a = ((a + d) * c) - b;
+  }
+  else {
+    e[d-a] = 5;
+    a = a >= b;
+  }
+}
+

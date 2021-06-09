@@ -1,0 +1,20 @@
+int recursiveFunction(int number) {
+  if(number == 0) {
+    return 1;
+  }
+  recursiveFunction(number - 1);
+
+  return number + recursiveFunction(number - 2);
+}
+
+
+void main(void) {
+  int number;
+  int numberb;
+
+  input number;
+
+  numberb = recursiveFunction(number);
+  output numberb;
+}
+

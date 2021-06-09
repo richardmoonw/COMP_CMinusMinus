@@ -1,0 +1,17 @@
+int number;
+
+int convertNumber(int oddValue) {
+  int evenValue;
+
+  evenValue = oddValue * 2;
+  
+  return evenValue; 
+}
+
+void main(void) {
+  int myValue;
+
+  myValue = 1;
+
+  number = convertNumber(myValue);
+}

@@ -1,0 +1,22 @@
+void main(void) {
+  int a;
+  int b;
+
+  a = 15;
+  b = 30;
+
+  while(a >= 0) {
+    if(a>10){
+      if (a>12) {
+        a = a - 3;
+        b = b - 3;
+      }
+      else 
+        a = a - 1;
+    } else {
+      a = a - 2;
+      b = b + 1;
+    }
+  }
+}
+

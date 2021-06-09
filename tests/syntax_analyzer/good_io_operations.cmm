@@ -1,0 +1,21 @@
+void main(void) {
+  int numbera;
+  int numberb[3];
+  int numberc;
+
+  input numbera;
+  input numberb[1];
+  numberc = 6;
+
+  if(numbera < numberb[1]) {
+    output 1;
+  } else {
+    output numberb[1];
+  }
+
+  if (numberc < numberb[1]) {
+    output 1;
+    output numbera > numberc;
+  }
+}
+
