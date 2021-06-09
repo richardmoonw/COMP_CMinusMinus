@@ -9,7 +9,7 @@
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}",
-            "args": "tests/lexical_analyzer/main.cmm"
+            "args": "tests/syntax_analyzer/main.cmm"
         },
         {
             "type": "java",

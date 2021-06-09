@@ -156,48 +156,48 @@ public class SyntacticEnvironment {
   public static final int ER42 = -42;   /* ARGS_LIST_PRIME ERROR */
 
   // Syntactical error messages definition.
-  private static String ERM1 = "ERROR: Wrong variable or function definition. int or void are the possible options, but it was obtained %s";                      /* PROGRAM ERROR */
-  private static String ERM2 = "ERROR: Wrong variable or function definition. int, void or EOF are the possible options, but it was obtained %s";                 /* DECLARATION_LIST_PRIME ERROR */      
-  private static String ERM3 = "ERROR: Wrong variable or function definition. int or void are the possible options, but it was obtained %s";                      /* DECLARATION ERROR */ 
-  private static String ERM4 = "ERROR: Wrong int variable or function definition. ;, ( or [ are the possible options,  but it was obtained %s";                   /* DECLARATION_PRIME ERROR */ 
-  private static String ERM5 = "ERROR: Wrong void function definition. { is the possible option, but it was obtained %s";                                         /* DECLARATION_BIPRIME ERROR */ 
-  private static String ERM6 = "ERROR: Wrong void function definition. } or return are the possible options, but it was obtained %s";                             /* DECLARATION_TRIPRIME ERROR */ 
-  private static String ERM7 = "ERROR: Wrong variable definition. int is the possible option, but it was obtained %s";                                            /* VAR_DECLARATION ERROR */ 
-  private static String ERM8 = "ERROR: Wrong variable definition. ; or [ are the possible options, but it was obtained %s";                                       /* VAR_DECLARATION_PRIME ERROR */ 
-  private static String ERM9 = "ERROR: Wrong function's params definition. int or void are the possible options, but it was obtained %s";                         /* PARAMS ERROR */ 
-  private static String ERM10 = "ERROR: Wrong function's param list definition. , or ) are the possible options, but it was obtained %s";                         /* PARAM_LIST_PRIME ERROR */ 
-  private static String ERM11 = "ERROR: Wrong function's param definition. int is the possible option, but it was obtained %s";                                   /* PARAM ERROR */ 
-  private static String ERM12 = "ERROR: Wrong function's param definition. ,, ) or [ are the possible options, but it was obtained %s";                           /* PARAM_PRIME ERROR */ 
-  private static String ERM13 = "ERROR: Wrong statement declaration. ID, {, if, return, while, input or output are the possible options, but it was obtained %s"; /* COMPOUND_STMT ERROR */ 
-  private static String ERM14 = "ERROR: Wrong enclosed declaration. } or return are the possible options, but it was obtained %s";                                /* COMPOUND_STMT_PRIME ERROR */ 
-  private static String ERM15 = "ERROR: Wrong assignment or function call definition. =, (, [ are the possible options, but it was obtained %s";                  /* COMPOUND_STMT_BIPRIME ERROR */
-                                                                                                                                                                  /* STATEMENT_PRIME ERROR */ 
-  private static String ERM16 = "ERROR: Wrong if statement definition. ID, else, if, return, while, input or output are the possible options, but it was obtained %s";    /* COMPOUND_STMT_TRIPRIME ERROR */ 
-  private static String ERM17 = "ERROR: Wrong return definition. ID, NUM, ; or ( are the possible options, but it was obtained %s";                               /* COMPOUND_STMT_POLYPRIME ERROR */ 
-  private static String ERM18 = "ERROR: Wrong int function definition. { is the possible option, but it was obtained %s";                                         /* COMPOUND_STMT_RET ERROR */ 
-  private static String ERM19 = "ERROR: Wrong local declarations. ID, }, if, int, return, while, input or output are the possible options, but it was obtained %s";       /* LOCAL_DECLARATIONS ERROR */
-                                                                                                                                                                          /* LOCAL_DECLARATIONS_PRIME ERROR */
-  private static String ERM20 = "ERROR: Wrong statement list definition. ID, }, if, int, return, while, input or output are the possible options, but it was obtained %s";   /* STATEMENT_LIST ERROR */
-                                                                                                                                                                  /* STATEMENT_LIST_PRIME ERROR */
-  private static String ERM21 = "ERROR: Wrong single statement declaration. ID, if, while, input or output are the possible options, but it was obtained %s";     /* STATEMENT ERROR */
-  private static String ERM22 = "ERROR: Wrong if statement definition. ID, }, else, if, return, while, input, output are the possible options, but it was obtained %s";      /* STATEMENT_BIPRIME ERROR */
-  private static String ERM23 = "ERROR: Wrong return definition. return is the possible option, but it was obtained %s";                                          /* RETURN_STMT ERROR */
-  private static String ERM24 = "ERROR: Wrong return definition. ID, NUM, ; or ( are the possible options, but it was obtained %s";                               /* RETURN_STMT_PRIME ERROR */
-  private static String ERM25 = "ERROR: Wrong input of variable definition. ID is the possible option, but it was obtained %s";                                   /* VAR ERROR */
-  private static String ERM26 = "ERROR: Wrong input of variable definition. ; or [ are the possible options, but it was obtained %s";                             /* VAR_PRIME ERROR */
-  private static String ERM27 = "ERROR: Wrong expression definition. ID, NUM or ( are the possible options, but it was obtained %s";                              /* EXPRESSION ERROR */
-  private static String ERM28 = "ERROR: Wrong expression definition. <, <=, >, >=, ==, !=, ; or ) are the possible options, but it was obtained %s";              /* EXPRESSION_PRIME ERROR */
-  private static String ERM29 = "ERROR: Wrong relational operator definition. <, <=, >, >=, ==, != are the possible options, but it was obtained %s";             /* RELOP ERROR */
-  private static String ERM30 = "ERROR: Wrong operand definition. ID, NUM or ( are the possible options, but it was obtained %s";                                 /* ARITHMETIC_EXPRESSION ERROR */
-                                                                                                                                                                  /* TERM ERROR */
-                                                                                                                                                                  /* FACTOR ERROR */
-  private static String ERM31 = "ERROR: Wrong operation definition. +, -, <, <=, >, >=, ==, !=, ;, ,, ) or ] are the possible options, but it was obtained %s";   /* ARITHMETIC_EXPRESSION_PRIME ERROR */
-  private static String ERM32 = "ERROR: Wrong arithmetic operator definition. + or - are the possible options, but it was obtained %s";                           /* ADDOP ERROR */
-  private static String ERM33 = "ERROR: Wrong operation definition. /, *, +, -, <, <=, >, >=, ==, !=, ;, ,, ) or ] are the possible options, but it was obtained %s";        /* TERM_PRIME ERROR */
-  private static String ERM34 = "ERROR: Wrong arithmetic operator definition. / or * are the possible options, but it was obtained %s";                           /* MULOP ERROR */ 
-  private static String ERM35 = "ERROR: Wrong operand definition. /, *, +, -, <, <=, >, >=, ==, !=, ;, ,, (, ) [ or ] are the possible options, but it was obtained %s";     /* FACTOR_PRIME ERROR */
-  private static String ERM36 = "ERROR: Wrong function's arguments definition. ID, NUM, (, ) are the possible options, but it was obtained %s";                   /* ARGS ERROR */
-  private static String ERM37 = "ERROR: Wrong function's argument list definition. , or ) are the possible options, but it was obtained %s";                      /* ARGS_LIST_PRIME ERROR */
+  private static String ERM1 = "ERROR: Wrong variable or function definition. int or void are the possible options, but it was obtained %s";                                  /* PROGRAM ERROR */
+  private static String ERM2 = "ERROR: Wrong variable or function definition. int, void or EOF are the possible options, but it was obtained %s";                             /* DECLARATION_LIST_PRIME ERROR */      
+  private static String ERM3 = "ERROR: Wrong variable or function definition. int or void are the possible options, but it was obtained %s";                                  /* DECLARATION ERROR */ 
+  private static String ERM4 = "ERROR: Wrong int variable or function definition. ;, ( or [ are the possible options,  but it was obtained %s";                               /* DECLARATION_PRIME ERROR */ 
+  private static String ERM5 = "ERROR: Wrong void function definition. { is the possible option, but it was obtained %s";                                                     /* DECLARATION_BIPRIME ERROR */ 
+  private static String ERM6 = "ERROR: Wrong void function definition. } or return are the possible options, but it was obtained %s";                                         /* DECLARATION_TRIPRIME ERROR */ 
+  private static String ERM7 = "ERROR: Wrong variable definition. int is the possible option, but it was obtained %s";                                                        /* VAR_DECLARATION ERROR */ 
+  private static String ERM8 = "ERROR: Wrong variable definition. ; or [ are the possible options, but it was obtained %s";                                                   /* VAR_DECLARATION_PRIME ERROR */ 
+  private static String ERM9 = "ERROR: Wrong function's params definition. int or void are the possible options, but it was obtained %s";                                     /* PARAMS ERROR */ 
+  private static String ERM10 = "ERROR: Wrong function's param list definition. , or ) are the possible options, but it was obtained %s";                                     /* PARAM_LIST_PRIME ERROR */ 
+  private static String ERM11 = "ERROR: Wrong function's param definition. int is the possible option, but it was obtained %s";                                               /* PARAM ERROR */ 
+  private static String ERM12 = "ERROR: Wrong function's param definition. ,, ) or [ are the possible options, but it was obtained %s";                                       /* PARAM_PRIME ERROR */ 
+  private static String ERM13 = "ERROR: Wrong statement declaration. ID, {, if, return, while, input or output are the possible options, but it was obtained %s";             /* COMPOUND_STMT ERROR */ 
+  private static String ERM14 = "ERROR: Wrong enclosed declaration. } or return are the possible options, but it was obtained %s";                                            /* COMPOUND_STMT_PRIME ERROR */ 
+  private static String ERM15 = "ERROR: Wrong assignment or function call definition. =, (, [ are the possible options, but it was obtained %s";                              /* COMPOUND_STMT_BIPRIME ERROR */
+                                                                                                                                                                              /* STATEMENT_PRIME ERROR */ 
+  private static String ERM16 = "ERROR: Wrong if statement definition. ID, else, if, return, while, input or output are the possible options, but it was obtained %s";        /* COMPOUND_STMT_TRIPRIME ERROR */ 
+  private static String ERM17 = "ERROR: Wrong return definition. ID, NUM, ; or ( are the possible options, but it was obtained %s";                                           /* COMPOUND_STMT_POLYPRIME ERROR */ 
+  private static String ERM18 = "ERROR: Wrong int function definition. { is the possible option, but it was obtained %s";                                                     /* COMPOUND_STMT_RET ERROR */ 
+  private static String ERM19 = "ERROR: Wrong local declarations. ID, }, if, int, return, while, input or output are the possible options, but it was obtained %s";           /* LOCAL_DECLARATIONS ERROR */
+                                                                                                                                                                              /* LOCAL_DECLARATIONS_PRIME ERROR */
+  private static String ERM20 = "ERROR: Wrong statement list definition. ID, }, if, int, return, while, input or output are the possible options, but it was obtained %s";    /* STATEMENT_LIST ERROR */
+                                                                                                                                                                              /* STATEMENT_LIST_PRIME ERROR */
+  private static String ERM21 = "ERROR: Wrong single statement declaration. ID, if, while, input or output are the possible options, but it was obtained %s";                 /* STATEMENT ERROR */
+  private static String ERM22 = "ERROR: Wrong if statement definition. ID, }, else, if, return, while, input, output are the possible options, but it was obtained %s";       /* STATEMENT_BIPRIME ERROR */
+  private static String ERM23 = "ERROR: Wrong return definition. return is the possible option, but it was obtained %s";                                                      /* RETURN_STMT ERROR */
+  private static String ERM24 = "ERROR: Wrong return definition. ID, NUM, ; or ( are the possible options, but it was obtained %s";                                           /* RETURN_STMT_PRIME ERROR */
+  private static String ERM25 = "ERROR: Wrong input of variable definition. ID is the possible option, but it was obtained %s";                                               /* VAR ERROR */
+  private static String ERM26 = "ERROR: Wrong input of variable definition. ; or [ are the possible options, but it was obtained %s";                                         /* VAR_PRIME ERROR */
+  private static String ERM27 = "ERROR: Wrong expression definition. ID, NUM or ( are the possible options, but it was obtained %s";                                          /* EXPRESSION ERROR */
+  private static String ERM28 = "ERROR: Wrong expression definition. <, <=, >, >=, ==, !=, ; or ) are the possible options, but it was obtained %s";                          /* EXPRESSION_PRIME ERROR */
+  private static String ERM29 = "ERROR: Wrong relational operator definition. <, <=, >, >=, ==, != are the possible options, but it was obtained %s";                         /* RELOP ERROR */
+  private static String ERM30 = "ERROR: Wrong operand definition. ID, NUM or ( are the possible options, but it was obtained %s";                                             /* ARITHMETIC_EXPRESSION ERROR */
+                                                                                                                                                                              /* TERM ERROR */
+                                                                                                                                                                              /* FACTOR ERROR */
+  private static String ERM31 = "ERROR: Wrong operation definition. +, -, <, <=, >, >=, ==, !=, ;, ,, ) or ] are the possible options, but it was obtained %s";               /* ARITHMETIC_EXPRESSION_PRIME ERROR */
+  private static String ERM32 = "ERROR: Wrong arithmetic operator definition. + or - are the possible options, but it was obtained %s";                                       /* ADDOP ERROR */
+  private static String ERM33 = "ERROR: Wrong operation definition. /, *, +, -, <, <=, >, >=, ==, !=, ;, ,, ) or ] are the possible options, but it was obtained %s";         /* TERM_PRIME ERROR */
+  private static String ERM34 = "ERROR: Wrong arithmetic operator definition. / or * are the possible options, but it was obtained %s";                                       /* MULOP ERROR */ 
+  private static String ERM35 = "ERROR: Wrong operand definition. /, *, +, -, <, <=, >, >=, ==, !=, ;, ,, (, ) [ or ] are the possible options, but it was obtained %s";      /* FACTOR_PRIME ERROR */
+  private static String ERM36 = "ERROR: Wrong function's arguments definition. ID, NUM, (, ) are the possible options, but it was obtained %s";                               /* ARGS ERROR */
+  private static String ERM37 = "ERROR: Wrong function's argument list definition. , or ) are the possible options, but it was obtained %s";                                  /* ARGS_LIST_PRIME ERROR */
 
 
   // Production rules for the final Context Free Grammar.
@@ -795,19 +795,21 @@ public class SyntacticEnvironment {
     return errorMessage + String.format(". To correct the error look at the token #%s", currentToken);
   }
 
-  // Method used to initialize either the identifiers' semantic symbol table or the numbers' semantic symbol table with the
-  // size of their equivalents obtained during the lexical analysis.
+  // Method used to initialize either the identifiers' semantic symbol table or the numbers' semantic symbol 
+  // table with the size of their equivalents obtained during the lexical analysis.
   public static void initializeSemantics(int identifierSymbolsTableSize, int numberSymbolsTableSize) {
     IDENTIFIERS_SEMANTIC_SYMBOL_TABLE = new int[identifierSymbolsTableSize][2];
     NUMBERS_SEMANTIC_SYMBOL_TABLE = new int[numberSymbolsTableSize];
   }
 
-  // Method used to assign the corresponding semantic tags to any entrance within the identifiers' semantic symbol table.
+  // Method used to assign the corresponding semantic tags to any entrance within the identifiers' semantic 
+  // symbol table.
   private static void setIdentifierSemantics(int entry, int position, int description) {
     IDENTIFIERS_SEMANTIC_SYMBOL_TABLE[entry][position] = description;
   }
 
-  // Method used to assign the corresponding semantic tags to any entrance within the numbers' semantic symbol table.
+  // Method used to assign the corresponding semantic tags to any entrance within the numbers' semantic 
+  // symbol table.
   private static void setNumberSemantic(int entry, int description) {
     NUMBERS_SEMANTIC_SYMBOL_TABLE[entry] = description;
   }
@@ -898,17 +900,16 @@ public class SyntacticEnvironment {
   // Method used to assign the proper semantic tag (according to token type) to a given entry of the numbers'
   // symbol table. For the syntactic analyzer being developed, the only available token type for numeric values 
   // is an integer constant.
-  // constant
   public static void assignTokenTypeToNumbers(Object[] token) {
     SyntacticEnvironment.setNumberSemantic((int) token[1], INTEGER_CONSTANT);
   }
 
-  // Method used to obtain the whole semantic symbol table for identifiers.
+  // Method used to obtain a given entry of the semantic symbol table for identifiers.
   public static int getIdentifiersSemanticSymbolTable(int index, int category) {
     return IDENTIFIERS_SEMANTIC_SYMBOL_TABLE[index][category];
   }
 
-  // Method used to obtain the whole semantic symbol table for numbers.
+  // Method used to obtain a given entry of the semantic symbol table for numbers.
   public static int getNumbersSemanticSymbolTable(int index) {
     return NUMBERS_SEMANTIC_SYMBOL_TABLE[index];
   }
