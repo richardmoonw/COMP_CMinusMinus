@@ -1,14 +1,20 @@
 /* 
 The Compiler class is the one that can be directly invoked from the command console in order to begin the execution
-of the lexical analyzer. It is in charge of receiving the arguments of its invocation, validate their number, finish
-the execution of the program if a error is raised, iterate over all the characters in the source code in order to 
-determine whether they can be defined as valid tokens or they have to be identified as errors, and print the final 
-results. 
+of the lexical and syntactic analyzer. It is in charge of receiving the arguments of its invocation, validate their 
+number and finish the execution of the program if a error is raised. Then, the class iterate over all the characters 
+in the source code in order to determine whether they can be defined as valid tokens or they have to be identified as 
+errors, and print the sequence of tokens and symbol tables produced during the lexical analysis. After that, the program
+validates the syntactic structure of the elements from the sequence of tokens, according to a symbols stack and a 
+previously defined parsing table. Finally, the class is in charge of determining wether a sequence of tokens have a valid 
+syntactic structure or not, and if it actually have it, the symbol tables should be printed with some semantic tags added 
+during the previous processes. 
 
 The Compiler class uses the FileManager class in order to have access to the source code from a single variable and to 
 finish the execution of the program in the case that any error is found while opening or reading the file. 
 The Compiler class uses the CompilerEnvironment class to manage and have access to the different variables that define 
-the general behaviour of the required data structures for the correct operation of the lexical analyzer.  
+the general behaviour of the required data structures for the correct operation of the lexical analyzer.
+The Compiler class uses the SyntacticEnvironment class to mananage and have access to the different variables that define
+the general behaviour of the required data structures for the correct operation of the syntactic analyzer.
 */
 
 import java.io.FileNotFoundException;
