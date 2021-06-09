@@ -1,0 +1,11 @@
+int number;
+
+int getResult(int add, int sub) {
+  return number + add - sub;
+}
+
+void main(void) {
+  int a;
+  a = getResult(3,);
+  output a;
+}

@@ -1,0 +1,19 @@
+void main(void) {
+  int a;
+  int b;
+
+  input a;
+  input b;
+
+  while(a<b) {
+    if(a<b-5) {
+      return;
+    else {
+      input a;
+      input b;
+    }
+  }
+
+  return;
+}
+

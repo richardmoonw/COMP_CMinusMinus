@@ -1,0 +1,20 @@
+int number;
+
+void setNumber(int) {
+  number = number;
+
+  return;
+}
+
+void main(void) {
+  /* Declare the variable */
+  int number;
+
+  /* Ask the user for the variable
+     and set it */
+  input number;
+  setNumber(number);
+
+  /* Print the variable */
+  output number;
+}

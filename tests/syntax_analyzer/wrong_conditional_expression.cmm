@@ -1,0 +1,16 @@
+void main(void) {
+  int a;
+  int b;
+  int c;
+
+  input a;
+  input b;
+  input c;
+
+  if ((a+b)>) {
+    output 5;
+  }
+  else {
+    output 3;
+  }
+}
