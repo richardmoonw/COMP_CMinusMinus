@@ -5,7 +5,7 @@ number and finish the execution of the program if a error is raised. Then, the c
 in the source code in order to determine whether they can be defined as valid tokens or they have to be identified as 
 errors, and print the sequence of tokens and symbol tables produced during the lexical analysis. After that, the program
 validates the syntactic structure of the elements from the sequence of tokens, according to a symbols stack and a 
-previously defined parsing table. Finally, the class is in charge of determining wether a sequence of tokens have a valid 
+previously defined parsing table. Finally, the class is in charge of determining whether a sequence of tokens have a valid 
 syntactic structure or not, and if it actually have it, the symbol tables should be printed with some semantic tags added 
 during the previous processes. 
 
@@ -214,7 +214,7 @@ public class Compiler {
             SyntacticEnvironment.initializeSemantics(CompilerEnvironment.getIdentifierSymbolTable().size(), CompilerEnvironment.getNumberSymbolTable().size());
 
             // Stack used to store the symbols obtained from the different production rules of the CFG according to the tokens read 
-            // from the token sequence. Each element of the stack represents the id of an terminal or non-terminal symbol of the 
+            // from the token sequence. Each element of the stack represents the id of a terminal or non-terminal symbol of the 
             // grammar.
             Stack<Integer> symbolsStack = new Stack<>();
 
@@ -244,19 +244,19 @@ public class Compiler {
                 if (symbolsStack.peek() < SyntacticEnvironment.TERMINALS_HIGHER_BOUND && (symbolsStack.peek() == readToken)) {
 
                     // If the current token is an identifier. Determine whether it is a variable, function or variable/function name,
-                    // and whether it has a local, global or local/global scope and add that properties to the identifiers' symbols 
-                    // table.
+                    // and whether it has a local, global or local/global scope and add that properties to the temporal identifiers' 
+                    // symbols table.
                     if ((int) currentToken[0] == SyntacticEnvironment.IDENTIFIER) {
                         SyntacticEnvironment.assignTokenTypeToIdentifiers(currentToken, sequenceOfTokens.get(currentTokenCounter + 1));
                         SyntacticEnvironment.assignTokenScopeToIdentifiers(currentToken, previousRule);
                     } 
                     
-                    // If the current token is a number. Add the corresponding number type property to the numbers' symbol table.
+                    // If the current token is a number. Add the corresponding number type property to the temporal numbers' symbols table.
                     else if((int) currentToken[0] == SyntacticEnvironment.NUMBER) {
                         SyntacticEnvironment.assignTokenTypeToNumbers(currentToken);
                     }
                     
-                    // Remove the symbol at the top of the stack from it and increment the current token counter by 1.
+                    // Remove the symbol at the top of the stack and increment the current token counter by 1.
                     symbolsStack.pop();
                     currentTokenCounter++;
                 }
@@ -303,11 +303,11 @@ public class Compiler {
             // If the symbol at the top of the stack and the current token are the $ token (EOF).
             if(symbolsStack.peek() == SyntacticEnvironment.DOLAR && (currentToken[0].equals(SyntacticEnvironment.DOLAR))) {
 
-                // Retrieve the symbol tables generated during the lexical analysis.
+                // Retrieve the symbols tables generated during the lexical analysis.
                 ArrayList<String> identifiers = CompilerEnvironment.getIdentifierSymbolTable();
                 ArrayList<Integer> numbers = CompilerEnvironment.getNumberSymbolTable();
 
-                // For each entry of the original identifiers' symbol table.
+                // For each entry of the original identifiers' symbols table.
                 for(int i=0; i< identifiers.size(); i++) {
 
                     // Merge the corresponding identifier, identifier type and identifier scope in a record of the new and updated identifiers'

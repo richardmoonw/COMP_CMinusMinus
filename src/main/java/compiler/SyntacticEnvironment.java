@@ -1,8 +1,11 @@
 /* 
 The SyntacticEnvironment class stores all constant and non constant variables used by the Compiler class in order
-to evaluate the sequence of tokens to determine whether a program has a correct syntactical structure or not. It also 
+to evaluate the sequence of tokens to determine whether a program has a correct syntactic structure or not. It also 
 contains a few methods to obtain or modify the values of the variables within the class. The class contains the 
-implementation of some important data structures as the TBD.
+implementation of some important data structures as the arrays to store the semantic tags for the symbol tables' 
+entries, the array of lists to store the production rules of the final grammar, the bidimensional array used to
+represent the parsing table LL(1), and an array of strings that permit to identify a token symbol or description
+in order to construct nice error messages.
 */
 
 import java.util.*;
@@ -155,7 +158,7 @@ public class SyntacticEnvironment {
   public static final int ER41 = -41;   /* ARGS ERROR */
   public static final int ER42 = -42;   /* ARGS_LIST_PRIME ERROR */
 
-  // Syntactical error messages definition.
+  // Syntactic error messages definition.
   private static String ERM1 = "ERROR: Wrong variable or function definition. int or void are the possible options, but it was obtained %s";                                  /* PROGRAM ERROR */
   private static String ERM2 = "ERROR: Wrong variable or function definition. int, void or EOF are the possible options, but it was obtained %s";                             /* DECLARATION_LIST_PRIME ERROR */      
   private static String ERM3 = "ERROR: Wrong variable or function definition. int or void are the possible options, but it was obtained %s";                                  /* DECLARATION ERROR */ 
@@ -666,7 +669,7 @@ public class SyntacticEnvironment {
     "$"
   };
 
-  // Method used to get the error messages' description given its error code and the token that triggered the error.
+  // Method used to get the error message description given an error code and the token that triggered the error.
   public static String getErrorDescription(int errorCode, int currentToken, int readToken) {
     String errorMessage = "";
     String currentTokenChar = TOKENS[readToken];
@@ -802,13 +805,13 @@ public class SyntacticEnvironment {
     NUMBERS_SEMANTIC_SYMBOL_TABLE = new int[numberSymbolsTableSize];
   }
 
-  // Method used to assign the corresponding semantic tags to any entrance within the identifiers' semantic 
+  // Method used to assign the corresponding semantic tags to any entry within the identifiers' semantic 
   // symbol table.
   private static void setIdentifierSemantics(int entry, int position, int description) {
     IDENTIFIERS_SEMANTIC_SYMBOL_TABLE[entry][position] = description;
   }
 
-  // Method used to assign the corresponding semantic tags to any entrance within the numbers' semantic 
+  // Method used to assign the corresponding semantic tags to any entry within the numbers' semantic 
   // symbol table.
   private static void setNumberSemantic(int entry, int description) {
     NUMBERS_SEMANTIC_SYMBOL_TABLE[entry] = description;
