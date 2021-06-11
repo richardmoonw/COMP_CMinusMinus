@@ -2,8 +2,6 @@ int number;
 
 int setNumber(int number) {
   number = number;
-
-  return number;
 }
 
 void main(void) {
